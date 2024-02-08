@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">MyMeal</string>
+    <string name="app_name">Akelny</string>
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="SplashTXT">Let’s\nCooking</string>
+    <string name="SplashCaption">Find best recipes for cooking</string>
+    <string name="login_email_hint">Email</string>
+    <string name="register_name_hint">Name</string>
+    <string name="register_email_hint">Email</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_confirm_password_hint">Confirm Password *</string>
+    <string name="login_password_hint">Password</string>
+    <string name="Skip">Skip</string>
 </resources>
