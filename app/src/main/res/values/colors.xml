@@ -16,6 +16,7 @@
     <color name="darkTextColor">#020000</color>
 
 
+    <color name="backgrounds">#11cfc5</color>
     <!--colors for light mode-->
     <color name="contentTextColor">#020000</color>
     <color name="register_bk_color">#11CFC5</color>

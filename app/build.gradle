@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'androidx.navigation.safeargs'
 }
 
 android {
@@ -61,6 +62,12 @@ dependencies {
     implementation 'com.github.leandroborgesferreira:loading-button-android:2.3.0'
     //implementation 'com.google.android.material:material:3'
 
+    //circular image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //fragments
+    implementation "androidx.navigation:navigation-fragment:2.5.3"
+    implementation "androidx.navigation:navigation-ui:2.5.3"
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'

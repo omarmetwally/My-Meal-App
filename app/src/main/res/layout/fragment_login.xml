@@ -8,7 +8,8 @@
     android:background="@color/login_bk_color"
     android:focusableInTouchMode="true"
     android:gravity="center"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -53,12 +54,12 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"/>
 
-<!--                <ImageView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_alignParentTop="true"-->
-<!--                    android:layout_alignParentRight="true"-->
-<!--                    android:src="@drawable/ic_register_hero" />-->
+                <!--                <ImageView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_alignParentTop="true"-->
+                <!--                    android:layout_alignParentRight="true"-->
+                <!--                    android:src="@drawable/ic_register_hero" />-->
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/animationView2"
                     android:layout_width="200dp"
