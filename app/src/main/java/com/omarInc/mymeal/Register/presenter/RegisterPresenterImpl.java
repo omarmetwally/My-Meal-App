@@ -19,7 +19,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
         view.showLoading();
         firebaseAuth.signUpWithEmail(email, password, new IFirebaseAuth.AuthResultCallback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(String user) {
                 view.hideLoading();
                 view.onRegisterSuccess();
             }

@@ -14,12 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.omarInc.mymeal.R;
+import com.omarInc.mymeal.sharedpreferences.SharedPreferencesDataSourceImpl;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SplashFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SplashFragment extends Fragment {
     private static final int SPLASH_TIME_OUT = 3000;
     public static SplashFragment newInstance(String param1, String param2) {
@@ -52,8 +48,19 @@ public class SplashFragment extends Fragment {
             public void run() {
                 NavController navController = Navigation.findNavController(view);
 
-                navController.popBackStack();
-                navController.navigate(R.id.loginFragment);
+//                navController.popBackStack();
+
+                if (SharedPreferencesDataSourceImpl.getInstance(requireContext()).getAuthToken() != null) {
+                    // If token exists, navigate to HomeFragment
+                    SplashFragmentDirections.ActionSplashFragmentToHomeFragment action=
+                            SplashFragmentDirections.
+                                    actionSplashFragmentToHomeFragment("");
+                    action.setAuthID(SharedPreferencesDataSourceImpl.getInstance(requireContext()).getAuthToken());
+                    navController.navigate(action);
+                } else {
+                    // If not, navigate to LoginFragment
+                    navController.navigate(R.id.action_splashFragment_to_loginFragment);
+                }
 
 
             }

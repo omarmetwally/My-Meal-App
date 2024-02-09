@@ -69,12 +69,12 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
         btnLogin=view.findViewById(R.id.btnLogin);
         txtRegister=view.findViewById(R.id.txtRegisterNow);
         IFirebaseAuth authManager = new FirebaseAuthDataSourceImpl();
-        presenter = new LoginPresenterImpl(this, authManager);
+        presenter = new LoginPresenterImpl(this, authManager,getContext());
 
         txtRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.registerFragment);
+                navController.navigate(R.id.action_loginFragment_to_registerFragment);
             }
         });
 
@@ -109,14 +109,20 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     public void hideLoading() {
         btnLogin.stopAnimation();
         btnLogin.revertAnimation();
+        btnLogin.dispose();
 
     }
 
     @Override
-    public void onLoginSuccess() {
-        Snackbar.make(getView(), "Login Successfully", BaseTransientBottomBar.LENGTH_LONG).show();
+    public void onLoginSuccess(String userID) {
+        Snackbar.make(getView(), "Login Successfully"+userID, BaseTransientBottomBar.LENGTH_LONG).show();
 
-        // Navigate to the next screen or perform any success action
+        presenter.saveAuthToken(userID);
+        LoginFragmentDirections.ActionLoginFragmentToHomeFragment action =
+                LoginFragmentDirections.actionLoginFragmentToHomeFragment("");
+        action.setAuthID(userID);
+        navController.navigate(action);
+
 
     }
 

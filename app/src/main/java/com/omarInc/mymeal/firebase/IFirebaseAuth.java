@@ -7,7 +7,7 @@ public interface IFirebaseAuth {
     void signInWithEmail(@NonNull String email, @NonNull String password, AuthResultCallback callback);
 
     interface AuthResultCallback {
-        void onSuccess();
+        void onSuccess(String userId);
         void onFailure(@NonNull String errorMessage);
     }
 }

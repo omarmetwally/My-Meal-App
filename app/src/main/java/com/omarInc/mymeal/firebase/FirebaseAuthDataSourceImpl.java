@@ -3,6 +3,7 @@ package com.omarInc.mymeal.firebase;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class FirebaseAuthDataSourceImpl implements IFirebaseAuth {
     private final FirebaseAuth firebaseAuth;
@@ -16,7 +17,7 @@ public class FirebaseAuthDataSourceImpl implements IFirebaseAuth {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        callback.onSuccess();
+                        callback.onSuccess("");
                     } else {
                         callback.onFailure(task.getException() != null ? task.getException().getMessage() : "Unknown error occurred");
                     }
@@ -28,10 +29,18 @@ public class FirebaseAuthDataSourceImpl implements IFirebaseAuth {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        callback.onSuccess();
+                        // Retrieve the user ID of the signed-in user
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        if (user != null) {
+                            String userId = user.getUid(); // This is the user ID (token)
+                            callback.onSuccess(userId); // Modify your callback to include the user ID
+                        } else {
+                            callback.onFailure("Failed to retrieve user information.");
+                        }
                     } else {
                         callback.onFailure(task.getException() != null ? task.getException().getMessage() : "Unknown error occurred");
                     }
                 });
     }
+
 }
