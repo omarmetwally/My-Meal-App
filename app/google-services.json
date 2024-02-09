@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "220572722289",
+    "project_id": "mymeal-iti",
+    "storage_bucket": "mymeal-iti.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:220572722289:android:fa3d6f86072f290ace67d0",
+        "android_client_info": {
+          "package_name": "com.omarInc.mymeal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD94zF-fWWQ6E852yP7kpDCVF2PEGkmECU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

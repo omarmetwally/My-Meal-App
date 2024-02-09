@@ -28,7 +28,7 @@
             android:padding="20dp">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btnSkip"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
@@ -80,10 +80,10 @@
                 android:hint="@string/login_email_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailLoginEditTetx"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
 
-                    />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,12 +96,12 @@
                 app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordLoginEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
 
 
-                    />
+                    android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
             <!--            <android.support.design.widget.TextInputLayout-->
@@ -129,6 +129,7 @@
             <!--            </android.support.design.widget.TextInputLayout>-->
 
             <TextView
+                android:id="@+id/txtForgetPassword"
                 style="@style/viewParent"
                 android:layout_gravity="end"
                 android:layout_marginTop="10dp"

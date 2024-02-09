@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.omarInc.mymeal.Splash.SplashFragment"
+        android:name="com.omarInc.mymeal.Splash.view.SplashFragment"
         android:label="Splash"
         tools:layout="@layout/fragment_splash" >
 
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.omarInc.mymeal.Login.LoginFragment"
+        android:name="com.omarInc.mymeal.Login.view.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.omarInc.mymeal.Register.RegisterFragment"
+        android:name="com.omarInc.mymeal.Register.view.RegisterFragment"
         android:label="Register"
         tools:layout="@layout/fragment_register" />
 </navigation>

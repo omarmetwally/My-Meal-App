@@ -1,4 +1,4 @@
-package com.omarInc.mymeal.Splash;
+package com.omarInc.mymeal.Splash.view;
 
 import android.os.Bundle;
 
