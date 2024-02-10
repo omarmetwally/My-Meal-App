@@ -18,7 +18,7 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
+            app:destination="@id/homeHostFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true"/>
 
@@ -34,7 +34,7 @@
             app:destination="@id/registerFragment" />
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
+            app:destination="@id/homeHostFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -48,10 +48,10 @@
             app:destination="@id/loginFragment" />
     </fragment>
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.omarInc.mymeal.HomeFragment"
+        android:id="@+id/homeHostFragment"
+        android:name="com.omarInc.mymeal.HomeHostFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home_host" >
         <argument
             android:name="authID"
             app:argType="string" />

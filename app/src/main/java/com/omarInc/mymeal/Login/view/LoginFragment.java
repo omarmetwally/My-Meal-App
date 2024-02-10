@@ -1,5 +1,6 @@
 package com.omarInc.mymeal.Login.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.omarInc.mymeal.Login.presenter.LoginPresenter;
 import com.omarInc.mymeal.Login.presenter.LoginPresenterImpl;
+import com.omarInc.mymeal.MainActivity2;
 import com.omarInc.mymeal.R;
 import com.omarInc.mymeal.firebase.FirebaseAuthDataSourceImpl;
 import com.omarInc.mymeal.firebase.IFirebaseAuth;
@@ -118,10 +120,13 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
         Snackbar.make(getView(), "Login Successfully"+userID, BaseTransientBottomBar.LENGTH_LONG).show();
 
         presenter.saveAuthToken(userID);
-        LoginFragmentDirections.ActionLoginFragmentToHomeFragment action =
-                LoginFragmentDirections.actionLoginFragmentToHomeFragment("");
-        action.setAuthID(userID);
-        navController.navigate(action);
+//        LoginFragmentDirections.ActionLoginFragmentToHomeFragment action =
+//                LoginFragmentDirections.actionLoginFragmentToHomeFragment("");
+//        action.setAuthID(userID);
+//        navController.navigate(action);
+        Intent i = new Intent(getActivity(), MainActivity2.class);
+        startActivity(i);
+        getActivity().finish();
 
 
     }

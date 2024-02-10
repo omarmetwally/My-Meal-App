@@ -1,5 +1,6 @@
 package com.omarInc.mymeal.Splash.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,11 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.omarInc.mymeal.MainActivity2;
 import com.omarInc.mymeal.R;
+import com.omarInc.mymeal.Splash.presenter.SplashPresenter;
+import com.omarInc.mymeal.Splash.presenter.SplashPresenterImpl;
 import com.omarInc.mymeal.sharedpreferences.SharedPreferencesDataSourceImpl;
 
-public class SplashFragment extends Fragment {
+public class SplashFragment extends Fragment implements SplashView {
     private static final int SPLASH_TIME_OUT = 3000;
+    private SplashPresenter presenter;
+
     public static SplashFragment newInstance(String param1, String param2) {
         SplashFragment fragment = new SplashFragment();
         Bundle args = new Bundle();
@@ -29,6 +35,7 @@ public class SplashFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        presenter = new SplashPresenterImpl(this, SharedPreferencesDataSourceImpl.getInstance(requireContext()));
 
     }
 
@@ -42,29 +49,47 @@ public class SplashFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-                new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
                 NavController navController = Navigation.findNavController(view);
 
-//                navController.popBackStack();
-
-                if (SharedPreferencesDataSourceImpl.getInstance(requireContext()).getAuthToken() != null) {
-                    // If token exists, navigate to HomeFragment
-                    SplashFragmentDirections.ActionSplashFragmentToHomeFragment action=
-                            SplashFragmentDirections.
-                                    actionSplashFragmentToHomeFragment("");
-                    action.setAuthID(SharedPreferencesDataSourceImpl.getInstance(requireContext()).getAuthToken());
-                    navController.navigate(action);
-                } else {
-                    // If not, navigate to LoginFragment
-                    navController.navigate(R.id.action_splashFragment_to_loginFragment);
-                }
-
+//
+//                if (SharedPreferencesDataSourceImpl.getInstance(requireContext()).getAuthToken() != null) {
+//                    // If token exists, navigate to HomeHostFragment
+//                    SplashFragmentDirections.ActionSplashFragmentToHomeFragment action=
+//                            SplashFragmentDirections.
+//                                    actionSplashFragmentToHomeFragment("");
+//                    action.setAuthID(SharedPreferencesDataSourceImpl.getInstance(requireContext()).getAuthToken());
+//                    navController.navigate(action);
+//                } else {
+//                    // If not, navigate to LoginFragment
+//                    navController.navigate(R.id.action_splashFragment_to_loginFragment);
+//                }
+                presenter.decideNextPage();
 
             }
         }, SPLASH_TIME_OUT);
 
+    }
+
+    @Override
+    public void navigateToHome(String authToken) {
+
+//        NavController navController = Navigation.findNavController(requireView());
+//        SplashFragmentDirections.ActionSplashFragmentToHomeFragment action =
+//                SplashFragmentDirections.actionSplashFragmentToHomeFragment("");
+//        action.setAuthID(authToken);
+//        navController.navigate(action);
+        Intent i = new Intent(getActivity(), MainActivity2.class);
+        startActivity(i);
+       getActivity().finish();
+    }
+
+    @Override
+    public void navigateToLogin() {
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(R.id.action_splashFragment_to_loginFragment);
     }
 }
