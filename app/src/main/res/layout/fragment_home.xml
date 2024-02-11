@@ -282,6 +282,11 @@
             android:text="Recommended meals"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+<!--        <androidx.viewpager2.widget.ViewPager2-->
+<!--            android:id="@+id/viewPager"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent" />-->
         <!-- Horizontal scroll or RecyclerView for recommended meals -->
         <!-- ... -->
 
@@ -291,6 +296,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+<!--        <com.stack.viewpager.OrientedViewPager-->
+<!--            android:id="@+id/view_pager"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="300dp"-->
+<!--            android:background="#F7F9FC" />-->
         <!-- Horizontal scroll or RecyclerView for areas -->
         <!-- ... -->
 

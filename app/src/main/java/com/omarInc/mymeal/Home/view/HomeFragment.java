@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,8 @@ import com.omarInc.mymeal.recommendedMeals.presenter.RecommendedMealsPresenter;
 import com.omarInc.mymeal.recommendedMeals.presenter.RecommendedMealsPresenterImpl;
 import com.omarInc.mymeal.recommendedMeals.view.MealsAdapter;
 import com.omarInc.mymeal.recommendedMeals.view.RecommendedMealsView;
+import com.stack.viewpager.OrientedViewPager;
+import com.stack.viewpager.transformer.VerticalStackTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +59,15 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     private MealsAdapter mealsAdapter;
     private static final String TAG = "HomeFragment";
     ShimmerFrameLayout shimmerFrameLayout;
+
+    ViewPager2 viewPager2;
+
+
+
+
+    private OrientedViewPager mOrientedViewPager;
+    //private StackFragmentAdapter mContentFragmentAdapter;
+    private List<Fragment> mFragments = new ArrayList<>();
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -102,7 +114,7 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     }
 
     private void recommendedInit(@NonNull View view) {
-
+//
 
         recommendedMealsPresenter = new RecommendedMealsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
         recommendedMealsPresenter.fetchRecommendedMeals();
@@ -116,6 +128,33 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         //  recyclerViewCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mealsAdapter = new MealsAdapter(getContext(), new ArrayList<>());
         recommendedRecyclerView.setAdapter(mealsAdapter);
+
+        //////////////////*****************
+
+//        recommendedMealsPresenter = new RecommendedMealsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
+//        mOrientedViewPager = view.findViewById(R.id.view_pager);
+//        mOrientedViewPager.setOrientation(OrientedViewPager.Orientation.HORIZONTAL);
+//        mOrientedViewPager.setOffscreenPageLimit(1);
+//        mOrientedViewPager.setPageTransformer(true, new VerticalStackTransformer(getContext()));
+//
+//        // Fetch recommended meals and then set up the ViewPager adapter
+//        recommendedMealsPresenter.fetchRecommendedMeals();
+
+
+//        viewPager2 = view.findViewById(R.id.viewPager);
+//
+//        // Initialize your adapter with an empty list or pre-fetched data
+//        mealsAdapter = new MealsAdapter(getContext(), new ArrayList<>());
+//
+//        // Set the adapter to the ViewPager2
+//
+//        viewPager2.setAdapter(mealsAdapter);
+//
+//
+//        // Fetch recommended meals
+//        recommendedMealsPresenter = new RecommendedMealsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
+//        recommendedMealsPresenter.fetchRecommendedMeals();
+
     }
 
     private void areaInit(@NonNull View view) {
@@ -189,7 +228,15 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
 
     @Override
     public void showRecommendedMeals(List<Meal> meals) {
-        mealsAdapter.setMeals(meals);
+
+//        SectionPagerAdapter adapter = new SectionPagerAdapter(getChildFragmentManager(), meals);
+//        mOrientedViewPager.setAdapter(adapter);
+
+
+       mealsAdapter.setMeals(meals);
+        mealsAdapter.notifyDataSetChanged();
+
+
     }
 
     @Override

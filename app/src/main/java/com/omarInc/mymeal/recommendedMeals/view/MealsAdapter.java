@@ -2,10 +2,13 @@ package com.omarInc.mymeal.recommendedMeals.view;
 
 
 import android.content.Context;
+
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +22,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.flaviofaria.kenburnsview.KenBurnsView;
+import com.flaviofaria.kenburnsview.RandomTransitionGenerator;
 import com.omarInc.mymeal.R;
 import com.omarInc.mymeal.model.Meal;
 
@@ -65,7 +70,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
                     }
                 })
 //                .placeholder(R.layout.shimmer_placeholder)
-                .error(R.drawable.image_not_found_icon).into(holder.mealImage);
+                .error(R.drawable.image_not_found_icon).into(holder.kenBurnsView);
 
     }
 
@@ -83,6 +88,19 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
         ImageView mealImage;
         TextView txtCategoryName;
         ShimmerFrameLayout shimmerViewContainer;
+        KenBurnsView kenBurnsView;
+        // Duration for the transition in milliseconds
+        long duration = 2000; // 10 seconds
+
+        // Using an AccelerateDecelerateInterpolator for smooth acceleration and deceleration
+        Interpolator interpolator = new AccelerateDecelerateInterpolator();
+
+        // Creating the generator with specified duration and interpolator
+        RandomTransitionGenerator generator = new RandomTransitionGenerator(duration, interpolator);
+
+// Applying the generator to the KenBurnsView
+
+
 
 
         public ViewHolder(View itemView) {
@@ -90,6 +108,8 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
             txtCategoryName = itemView.findViewById(R.id.recipe_title);
             mealImage=itemView.findViewById(R.id.recipe_thumbnail);
             shimmerViewContainer=itemView.findViewById(R.id.shimmer_view_container);
+            kenBurnsView=itemView.findViewById(R.id.kbvLocation);
+            kenBurnsView.setTransitionGenerator(generator);
         }
     }
 }
