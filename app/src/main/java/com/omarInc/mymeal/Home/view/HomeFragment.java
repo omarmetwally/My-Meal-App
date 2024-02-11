@@ -32,20 +32,28 @@ import com.omarInc.mymeal.ingredients.view.IngredientsView;
 import com.omarInc.mymeal.model.Category;
 
 import com.omarInc.mymeal.model.Ingredient;
+import com.omarInc.mymeal.model.Meal;
 import com.omarInc.mymeal.network.MealRemoteDataSourceImpl;
+import com.omarInc.mymeal.recommendedMeals.presenter.RecommendedMealsPresenter;
+import com.omarInc.mymeal.recommendedMeals.presenter.RecommendedMealsPresenterImpl;
+import com.omarInc.mymeal.recommendedMeals.view.MealsAdapter;
+import com.omarInc.mymeal.recommendedMeals.view.RecommendedMealsView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements CategoriesView, IngredientsView , AreasView {
+public class HomeFragment extends Fragment implements CategoriesView, IngredientsView , AreasView, RecommendedMealsView {
 
     private RecyclerView categoriesRecyclerView,ingredientsRecyclerView,areaRecyclerView;
+    private RecyclerView recommendedRecyclerView;
     private CategoriesPresenter categoriesPresenter;
     private IngredientsPresenter ingredientsPresenter;
     private AreasPresenter areasPresenter;
+    private RecommendedMealsPresenter recommendedMealsPresenter;
     private CategoriesAdapter categoriesAdapter;
     private IngredientsAdapter ingredientsAdapter;
     private AreasAdapter areasAdapter;
+    private MealsAdapter mealsAdapter;
     private static final String TAG = "HomeFragment";
     ShimmerFrameLayout shimmerFrameLayout;
     public HomeFragment() {
@@ -88,6 +96,26 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         areaInit(view);
 
 
+        recommendedInit(view);
+
+
+    }
+
+    private void recommendedInit(@NonNull View view) {
+
+
+        recommendedMealsPresenter = new RecommendedMealsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
+        recommendedMealsPresenter.fetchRecommendedMeals();
+
+        recommendedRecyclerView = view.findViewById(R.id.recommendedRecView);
+        recommendedRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager recommendedLayoutManager = new LinearLayoutManager(getActivity());
+        recommendedLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        recommendedRecyclerView.setLayoutManager(recommendedLayoutManager);
+
+        //  recyclerViewCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        mealsAdapter = new MealsAdapter(getContext(), new ArrayList<>());
+        recommendedRecyclerView.setAdapter(mealsAdapter);
     }
 
     private void areaInit(@NonNull View view) {
@@ -95,8 +123,8 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         areasPresenter.getAreas();
         areaRecyclerView = view.findViewById(R.id.areaRecView);
         areaRecyclerView.setHasFixedSize(true);
-        // Specify the number of columns in the grid
-        int numberOfColumns = 2; // For example, 2 columns
+
+        int numberOfColumns = 3; // For example, 2 columns
 
         GridLayoutManager ingredientsLayoutManager = new GridLayoutManager(getActivity(), numberOfColumns);
         ingredientsLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -157,6 +185,11 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     public void showAreas(List<Area> areas) {
 
         areasAdapter.setAreas(areas);
+    }
+
+    @Override
+    public void showRecommendedMeals(List<Meal> meals) {
+        mealsAdapter.setMeals(meals);
     }
 
     @Override

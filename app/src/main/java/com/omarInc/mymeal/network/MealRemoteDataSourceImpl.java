@@ -89,11 +89,11 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
             public void onResponse(Call<AreasResponse> call, Response<AreasResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     networkCallBack.onSuccessResult(response.body());
-                    Log.i(TAG, "getAreas Response: Suc "+response.body());
+//                    Log.i(TAG, "getAreas Response: Suc "+response.body());
 
                 } else {
                     networkCallBack.onFailureResult("Failed to fetch areas: " + response.message());
-                    Log.i(TAG, "getAreas Response: Fal "+response.body());
+//                    Log.i(TAG, "getAreas Response: Fal "+response.body());
 
                 }
             }
@@ -120,7 +120,7 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     public void getLatestMeals(NetworkCallBack<MealsResponse> networkCallBack) {
         Call<MealsResponse> call = mealService.getLatestMeals();
         enqueueCall(call, networkCallBack);
-        Log.i(TAG, "onResponse: "+"sssssssssssssssssssssssssssssss");
+//        Log.i(TAG, "onResponse: "+"sssssssssssssssssssssssssssssss");
     }
 
     @Override
@@ -133,6 +133,7 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     public void getMealsByArea(String area, NetworkCallBack<MealsResponse> networkCallBack) {
         Call<MealsResponse> call = mealService.getMealsByArea(area);
         enqueueCall(call, networkCallBack);
+
     }
 
     @Override
@@ -154,10 +155,10 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
             public void onResponse(Call<T> call, Response<T> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     networkCallBack.onSuccessResult(response.body());
-                    Log.i(TAG, "sus: "+response.body());
+                    Log.i(TAG, "sussss: "+response.body());
                 } else {
                     networkCallBack.onFailureResult("Response unsuccessful");
-                    Log.i(TAG, "fail: "+response.body());
+                    Log.i(TAG, "failllll: "+response.body());
                 }
             }
 
