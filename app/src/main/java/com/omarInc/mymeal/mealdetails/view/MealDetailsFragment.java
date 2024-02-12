@@ -1,17 +1,24 @@
 package com.omarInc.mymeal.mealdetails.view;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,13 +28,23 @@ import com.omarInc.mymeal.mealdetails.presenter.MealDetailsPresenter;
 import com.omarInc.mymeal.mealdetails.presenter.MealDetailsPresenterImpl;
 import com.omarInc.mymeal.model.MealDetail;
 import com.omarInc.mymeal.network.MealRemoteDataSourceImpl;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
+
+import java.util.ArrayList;
 
 
 public class MealDetailsFragment extends Fragment implements MealDetailView {
 
-    private ImageView foodCoverImg,btnBackImage;
-    private TextView foodCategoryTxt, foodAreaTxt, foodTitleTxt, foodDescTxt, ingredientsTxt, measureTxt;
+    ProgressBar progressBar;
+    private ImageView foodCoverImg,btnBackImage,recipeYouTube;
+    private YouTubePlayerView youTubePlayerView ;
+    private TextView foodCategoryTxt, foodAreaTxt, foodTitleTxt, foodDescTxt;
+    private RecyclerView ingredientsRecyclerView;
     private MealDetailsPresenter presenter;
+    private  Ingredients_MeasuesAdapter ingredientsMeasuesAdapter;
+
 
     public MealDetailsFragment() {
         // Required empty public constructor
@@ -59,14 +76,25 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        foodCoverImg = view.findViewById(R.id.foodCoverImg);
-        foodCategoryTxt = view.findViewById(R.id.foodCategoryTxt);
-        foodAreaTxt = view.findViewById(R.id.foodAreaTxt);
-        foodTitleTxt = view.findViewById(R.id.foodTitleTxt);
-        foodDescTxt = view.findViewById(R.id.foodDescTxt);
-        ingredientsTxt = view.findViewById(R.id.ingredientsTxt);
-        measureTxt = view.findViewById(R.id.measureTxt);
+        progressBar=view.findViewById(R.id.detailLoading);
+        foodCoverImg = view.findViewById(R.id.recipeCoverImg);
+        foodCategoryTxt = view.findViewById(R.id.recipeCategoryTxt);
+        foodAreaTxt = view.findViewById(R.id.recipeAreaTxt);
+        foodTitleTxt = view.findViewById(R.id.recipeTitleTxt);
+        foodDescTxt = view.findViewById(R.id.recipeDescTxt);
         btnBackImage=view.findViewById(R.id.detailBack);
+        recipeYouTube=view.findViewById(R.id.recipeYouTube);
+        youTubePlayerView = view.findViewById(R.id.youtube_player_view);
+        ingredientsRecyclerView=view.findViewById(R.id.ingredientRecyclerView);
+        ingredientsRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager categoriesLayoutManager = new LinearLayoutManager(getActivity());
+        categoriesLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        ingredientsRecyclerView.setLayoutManager(categoriesLayoutManager);
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_scale_in);
+        ingredientsRecyclerView.setLayoutAnimation(animation);
+
+        ingredientsMeasuesAdapter = new Ingredients_MeasuesAdapter(getContext(), new ArrayList<>());
+        ingredientsRecyclerView.setAdapter(ingredientsMeasuesAdapter);
 
         presenter = new MealDetailsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
         if (getArguments() != null) {
@@ -81,19 +109,38 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
     @Override
     public void showMealDetails(MealDetail mealDetail) {
 
+        progressBar.setVisibility(View.GONE);
         Glide.with(this).load(mealDetail.getStrMealThumb()).into(foodCoverImg);
         foodCategoryTxt.setText(mealDetail.getStrCategory());
         foodAreaTxt.setText(mealDetail.getStrArea());
         foodTitleTxt.setText(mealDetail.getStrMeal());
-        // Set the instructions or description
         foodDescTxt.setText(mealDetail.getStrInstructions());
-        // Combine all ingredients into one string and set it to ingredientsTxt
-        ingredientsTxt.setText(mealDetail.getStrIngredient1()+"\n"+mealDetail.getStrIngredient2());
-        measureTxt.setText(mealDetail.getStrMeasure1()+"\n"+mealDetail.getStrMeasure2());
+
         btnBackImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigateUp();
+            }
+        });
+
+        ingredientsMeasuesAdapter.setIngredientsAndMeasures(mealDetail.getNonEmptyIngredientsAndMeasures());
+
+        if(mealDetail != null ) {
+            ingredientsRecyclerView.scheduleLayoutAnimation(); // Trigger animation after setting data
+        }
+        recipeYouTube.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openYouTubeVideo(mealDetail.getStrYoutube());
+            }
+        });
+
+        getLifecycle().addObserver(youTubePlayerView);
+        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+
+                youTubePlayer.cueVideo(extractYouTubeVideoId(mealDetail.getStrYoutube()), 0);
             }
         });
     }
@@ -102,5 +149,27 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
     public void showError(String errorMessage) {
 
 
+    }
+    private void openYouTubeVideo(String url) {
+        if (url != null && !url.isEmpty()) {
+            String videoId = extractYouTubeVideoId(url);
+
+            Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId));
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoId));
+
+            try {
+                startActivity(appIntent);
+            } catch (ActivityNotFoundException ex) {
+                startActivity(webIntent);
+            }
+        } else {
+            Toast.makeText(getContext(), "YouTube video link is not available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String extractYouTubeVideoId(String url) {
+        // Assuming the URL is in the format "http://www.youtube.com/watch?v=VIDEO_ID"
+        Uri uri = Uri.parse(url);
+        return uri.getQueryParameter("v");
     }
 }

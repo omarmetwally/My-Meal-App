@@ -1,6 +1,11 @@
 package com.omarInc.mymeal.model;
 
+import android.util.Pair;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MealDetail {
     @SerializedName("idMeal")
@@ -550,5 +555,38 @@ public class MealDetail {
     public void setDateModified(String dateModified) {
         this.dateModified = dateModified;
     }
+
+    public List<Pair<String, String>> getNonEmptyIngredientsAndMeasures() {
+        List<Pair<String, String>> pairs = new ArrayList<>();
+        addPairToList(pairs, strIngredient1, strMeasure1);
+        addPairToList(pairs, strIngredient2, strMeasure2);
+        addPairToList(pairs, strIngredient3, strMeasure3);
+        addPairToList(pairs, strIngredient4, strMeasure4);
+        addPairToList(pairs, strIngredient5, strMeasure5);
+        addPairToList(pairs, strIngredient6, strMeasure6);
+        addPairToList(pairs, strIngredient7, strMeasure7);
+        addPairToList(pairs, strIngredient8, strMeasure8);
+        addPairToList(pairs, strIngredient9, strMeasure9);
+        addPairToList(pairs, strIngredient10, strMeasure10);
+        addPairToList(pairs, strIngredient11, strMeasure11);
+        addPairToList(pairs, strIngredient12, strMeasure12);
+        addPairToList(pairs, strIngredient13, strMeasure13);
+        addPairToList(pairs, strIngredient14, strMeasure14);
+        addPairToList(pairs, strIngredient15, strMeasure15);
+        addPairToList(pairs, strIngredient16, strMeasure16);
+        addPairToList(pairs, strIngredient17, strMeasure17);
+        addPairToList(pairs, strIngredient18, strMeasure18);
+        addPairToList(pairs, strIngredient19, strMeasure19);
+        addPairToList(pairs, strIngredient20, strMeasure20);
+
+        return pairs;
+    }
+
+    private void addPairToList(List<Pair<String, String>> list, String ingredient, String measure) {
+        if (ingredient != null && !ingredient.trim().isEmpty() && measure != null && !measure.trim().isEmpty()) {
+            list.add(new Pair<>(ingredient, measure));
+        }
+    }
+
 }
 
