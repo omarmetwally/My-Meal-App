@@ -12,8 +12,6 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavBar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,15 +19,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph_home" />
 
-    <me.ibrahimsn.lib.SmoothBottomBar
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavBar"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_marginBottom="1dp"
-        app:backgroundColor="@color/backgrounds"
+        android:layout_width="360dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="24dp"
 
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bottom_background"
+
+        android:layout_marginTop="5dp"
+        app:itemIconSize="24dp"
+        app:itemIconTint="@drawable/item_selector"
+        app:itemRippleColor="@android:color/transparent"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView"
         app:menu="@menu/buttom_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

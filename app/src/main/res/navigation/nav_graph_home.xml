@@ -9,12 +9,20 @@
         android:id="@+id/homeFragment"
         android:name="com.omarInc.mymeal.Home.view.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.omarInc.mymeal.search.SearchFragment"
+        android:name="com.omarInc.mymeal.search.view.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/savedFragment"
         android:name="com.omarInc.mymeal.favorite.SavedFragment"
@@ -25,4 +33,13 @@
         android:name="com.omarInc.mymeal.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/mealDetailsFragment"
+        android:name="com.omarInc.mymeal.mealdetails.view.MealDetailsFragment"
+        android:label="@string/Meal_Details"
+        tools:layout="@layout/fragment_meal_details" >
+        <argument
+            android:name="meal_ID"
+            app:argType="string" />
+    </fragment>
 </navigation>

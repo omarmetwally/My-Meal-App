@@ -25,42 +25,25 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
 
         ////****** Bottom Nav el 2adema
-//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.fragmentContainerView);
-//        navController = navHostFragment.getNavController();
-//        bottomNavigationView = findViewById(R.id.bottomNavBar);
-//
-//        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView);
         navController = navHostFragment.getNavController();
-        View SmoothBottomBar = findViewById(R.id.bottomNavBar);
+        bottomNavigationView = findViewById(R.id.bottomNavBar);
 
-        if (navHostFragment != null) {
-            navController = navHostFragment.getNavController();
-        }
-        smoothBottomBar = findViewById(R.id.bottomNavBar);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-        // Manually handling item clicks on the SmoothBottomBar
-        smoothBottomBar.setOnItemSelectedListener(i -> {
-            switch (i) {
-                case 0:
-                    // Navigate using the NavController
-                    navController.navigate(R.id.homeFragment);
-                    break;
-                case 1:
-                    navController.navigate(R.id.searchFragment);
-                    break;
-                case 2:
-                    navController.navigate(R.id.savedFragment);
-                    break;
-                case 3:
-                    navController.navigate(R.id.profileFragment);
-                    break;
-
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if(destination.getId() == R.id.mealDetailsFragment) {
+                // Hide bottom navigation bar when in MealDetailsFragment
+                bottomNavigationView.setVisibility(View.GONE);
+            } else {
+                // Show bottom navigation bar for other destinations
+                bottomNavigationView.setVisibility(View.VISIBLE);
             }
-            // return true to display the item as the selected item
         });
+
     }
+
+
+
 }

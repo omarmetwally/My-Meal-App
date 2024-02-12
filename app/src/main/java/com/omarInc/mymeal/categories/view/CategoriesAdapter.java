@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,11 +19,14 @@ import java.util.List;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.omarInc.mymeal.R;
+import com.omarInc.mymeal.recommendedMeals.view.MealsAdapter;
 
 
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {
@@ -46,6 +50,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
+        holder.itemView.startAnimation(animation);
+
         holder.txtCategoryName.setText(categories.get(position).getStrCategory());
         holder.shimmerViewContainer.startShimmer();
         holder.shimmerViewContainer.setVisibility(View.VISIBLE);
@@ -81,6 +88,12 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     public void setCategories(List<Category> categories) {
         this.categories = categories;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        holder.itemView.clearAnimation();
+        super.onViewDetachedFromWindow(holder);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

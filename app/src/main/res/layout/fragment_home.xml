@@ -225,6 +225,21 @@
 
 
         </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Recommended meals"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recommendedRecView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -265,7 +280,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Areas"
+            android:text="Countries"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -274,16 +289,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="Recommended meals"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-<!--        <androidx.viewpager2.widget.ViewPager2-->
+        <!--        <androidx.viewpager2.widget.ViewPager2-->
 <!--            android:id="@+id/viewPager"-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="match_parent" />-->
@@ -291,12 +297,8 @@
         <!-- ... -->
 
         <!-- Areas section -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recommendedRecView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
-<!--        <com.stack.viewpager.OrientedViewPager-->
+        <!--        <com.stack.viewpager.OrientedViewPager-->
 <!--            android:id="@+id/view_pager"-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="300dp"-->

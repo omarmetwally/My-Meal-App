@@ -25,4 +25,10 @@
         android:layout_height="wrap_content"
         android:title="@string/Profile"
         android:icon="@drawable/profile"/>
+    <item
+        android:id="@+id/planFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/Plan"
+        android:icon="@drawable/profile"/>
 </menu>

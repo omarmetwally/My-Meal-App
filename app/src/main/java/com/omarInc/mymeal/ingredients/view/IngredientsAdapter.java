@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +22,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.omarInc.mymeal.R;
+import com.omarInc.mymeal.categories.view.CategoriesAdapter;
 import com.omarInc.mymeal.model.Ingredient;
 
 import java.util.List;
@@ -44,6 +47,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
+        holder.itemView.startAnimation(animation);
+
         Ingredient ingredient = ingredients.get(position);
         holder.txtIngredientName.setText(ingredient.getStrIngredient());
         // Assuming Ingredient model has a method getIngredientImageUrl() to get the image URL
@@ -83,6 +89,12 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        holder.itemView.clearAnimation();
+        super.onViewDetachedFromWindow(holder);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

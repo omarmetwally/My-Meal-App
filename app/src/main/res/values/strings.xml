@@ -12,10 +12,18 @@
     <string name="register_confirm_password_hint">Confirm Password *</string>
     <string name="login_password_hint">Password</string>
     <string name="Skip">Skip</string>
+    <string name="Meal_Details">Meal Recipes</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Home">Home</string>
     <string name="Search">Search</string>
     <string name="Profile">Profile</string>
     <string name="Favorite">Favorite</string>
+    <string name="Plan">Plan</string>
+
+    <string name="ingredients">Ingredients</string>
+    <string name="measure">Measure</string>
+
+
 </resources>

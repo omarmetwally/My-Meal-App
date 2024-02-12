@@ -1,12 +1,12 @@
-package com.omarInc.mymeal.search;
+package com.omarInc.mymeal.search.view;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -14,16 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.appcompat.widget.SearchView;
 
-import android.widget.Toast;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
+import com.omarInc.mymeal.Home.view.HomeFragment;
+import com.omarInc.mymeal.Home.view.HomeFragmentDirections;
 import com.omarInc.mymeal.R;
+import com.omarInc.mymeal.mealdetails.view.MealDetailsFragment;
 import com.omarInc.mymeal.model.Meal;
-import com.omarInc.mymeal.network.MealRemoteDataSource;
 import com.omarInc.mymeal.network.MealRemoteDataSourceImpl;
 import com.omarInc.mymeal.recommendedMeals.view.MealsAdapter;
 import com.omarInc.mymeal.search.presenter.SearchPresenter;
 import com.omarInc.mymeal.search.presenter.SearchPresenterImpl;
-import com.omarInc.mymeal.search.view.SearchingView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +74,18 @@ public class SearchFragment extends Fragment implements SearchingView {
 // Set up the RecyclerView with a GridLayoutManager
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2); // 2 columns
         searchResultsRecyclerView.setLayoutManager(gridLayoutManager);
-        adapter = new MealsAdapter(getContext(), new ArrayList<>());
+
+        adapter = new MealsAdapter(getContext(), new ArrayList<>(),mealId -> {
+
+            SearchFragmentDirections.ActionSearchFragmentToMealDetailsFragment action=
+                    SearchFragmentDirections.actionSearchFragmentToMealDetailsFragment(mealId);
+            NavHostFragment.findNavController(SearchFragment.this).navigate(action);
+        });
+
         searchResultsRecyclerView.setAdapter(adapter);
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_scale_in);
+        searchResultsRecyclerView.setLayoutAnimation(animation);
+
         searchPresenter.performSearch("");
 
 
@@ -96,6 +108,9 @@ public class SearchFragment extends Fragment implements SearchingView {
     @Override
     public void showSearchResults(List<Meal> meals) {
         adapter.setMeals(meals);
+        if(meals != null && !meals.isEmpty()) {
+            searchResultsRecyclerView.scheduleLayoutAnimation(); // Trigger animation after setting data
+        }
     }
 
     @Override

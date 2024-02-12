@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator;
 import com.omarInc.mymeal.R;
 import com.omarInc.mymeal.model.Meal;
+import com.omarInc.mymeal.model.OnMealClickListener;
 
 import java.util.List;
 
@@ -33,10 +36,13 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
 
     private List<Meal> meals;
     private Context context;
+    private OnMealClickListener listener;
 
-    public MealsAdapter(Context context, List<Meal> meals) {
+    public MealsAdapter(Context context, List<Meal> meals,OnMealClickListener listener) {
         this.context = context;
         this.meals = meals;
+        this.listener = listener;
+
     }
 
     @NonNull
@@ -48,7 +54,18 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        if (meals == null || meals.isEmpty()) {
+            // Handle the case where meals are not available
+            return; // Exit the method to prevent further execution and avoid the divide by zero error
+        }
+
+
         Meal meal = meals.get(position);
+
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
+        holder.itemView.startAnimation(animation);
+
         holder.txtCategoryName.setText(meal.getStrMeal());
         Glide.with(context)
                 .load(meal.getStrMealThumb())
@@ -72,17 +89,31 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
 //                .placeholder(R.layout.shimmer_placeholder)
                 .error(R.drawable.image_not_found_icon).into(holder.kenBurnsView);
 
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onMealClick(meals.get(position).getIdMeal());
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
         return meals != null ? meals.size() : 0;
+
     }
 
     public void setMeals(List<Meal> meals) {
         this.meals = meals;
         notifyDataSetChanged();
     }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        holder.itemView.clearAnimation();
+        super.onViewDetachedFromWindow(holder);
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView mealImage;

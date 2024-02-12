@@ -10,7 +10,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="5dp"
         >
 
         <com.facebook.shimmer.ShimmerFrameLayout
