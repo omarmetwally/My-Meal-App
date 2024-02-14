@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_mealDetailsFragment"
             app:destination="@id/mealDetailsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_ingredientSearchFragment"
+            app:destination="@id/ingredientSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -49,4 +52,9 @@
             android:name="isOffline"
             app:argType="boolean" />
     </fragment>
+    <fragment
+        android:id="@+id/ingredientSearchFragment"
+        android:name="com.omarInc.mymeal.IngredientSearchFragment"
+        android:label="fragment_ingredient_search"
+        tools:layout="@layout/fragment_ingredient_search" />
 </navigation>

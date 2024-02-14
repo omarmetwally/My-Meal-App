@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.TextView;
 
 
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -37,6 +38,7 @@ import com.omarInc.mymeal.ingredients.view.IngredientsView;
 import com.omarInc.mymeal.model.Category;
 
 import com.omarInc.mymeal.model.Ingredient;
+import com.omarInc.mymeal.model.IngredientsManager;
 import com.omarInc.mymeal.model.Meal;
 import com.omarInc.mymeal.network.MealRemoteDataSourceImpl;
 import com.omarInc.mymeal.recommendedMeals.presenter.RecommendedMealsPresenter;
@@ -63,6 +65,7 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     private MealsAdapter mealsAdapter;
     private static final String TAG = "HomeFragment";
     ShimmerFrameLayout shimmerFrameLayout;
+    private TextView seeMoreTextView;
 
     ViewPager2 viewPager2;
 
@@ -102,6 +105,7 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
+        seeMoreTextView=view.findViewById(R.id.seeMoreTxt);
 
         categoriesInit(view);
 
@@ -270,6 +274,15 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         if(ingredients != null && !ingredients.isEmpty()) {
             ingredientsRecyclerView.scheduleLayoutAnimation(); // Trigger animation after setting data
         }
+
+
+        IngredientsManager.getInstance().setIngredients(ingredients);
+        seeMoreTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override

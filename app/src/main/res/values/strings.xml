@@ -30,6 +30,9 @@
     <string name="dismiss">DISMISS</string>
     <string name="Backup">Backup</string>
     <string name="Logout">Logout</string>
+    <string name="IngredientSearch">Ingredients</string>
+    <string name="See_more">See more...</string>
+
 
 
 </resources>

@@ -21,6 +21,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,13 +43,14 @@ import java.util.ArrayList;
 public class MealDetailsFragment extends Fragment implements MealDetailView {
 
     ProgressBar progressBar;
-    private ImageView foodCoverImg,btnBackImage,recipeYouTube,detailFav;
+    private ImageView foodCoverImg,btnBackImage,recipeYouTube,detailFav,scroll_Image;
     private YouTubePlayerView youTubePlayerView ;
     private TextView foodCategoryTxt, foodAreaTxt, foodTitleTxt, foodDescTxt;
     private RecyclerView ingredientsRecyclerView;
     private MealDetailsPresenter presenter;
     private  Ingredients_MeasuesAdapter ingredientsMeasuesAdapter;
-    private boolean isOffline;
+    private boolean isOffline,scrollState=false;
+    private ScrollView scrollView;
 
 
     public MealDetailsFragment() {
@@ -91,6 +93,32 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
         recipeYouTube=view.findViewById(R.id.recipeYouTube);
         youTubePlayerView = view.findViewById(R.id.youtube_player_view);
         detailFav=view.findViewById(R.id.detailFav);
+        scroll_Image=view.findViewById(R.id.scroll_Image);
+        scrollView=view.findViewById(R.id.scrollView);
+
+        scroll_Image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                scrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                       if(!scrollState){
+                           scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                           scroll_Image.setImageResource(R.drawable.up_arrow);
+                           scrollState=true;
+                       }
+                       else {
+                           scrollView.fullScroll(ScrollView.FOCUS_UP);
+                           scroll_Image.setImageResource(R.drawable.down_arrow);
+                           scrollState=false;
+                       }
+                    }
+                });
+
+            }
+        });
+
 
         ingredientsRecyclerView=view.findViewById(R.id.ingredientRecyclerView);
         ingredientsRecyclerView.setHasFixedSize(true);

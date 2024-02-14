@@ -1,8 +1,15 @@
 package com.omarInc.mymeal.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Ingredient {
+import java.io.Serializable;
+
+public class Ingredient  {
     @SerializedName("idIngredient")
     private String idIngredient;
     @SerializedName("strIngredient")
@@ -44,5 +51,6 @@ public class Ingredient {
     public void setIngredientImageUrl(String ingredientImageUrl) {
         IngredientImageUrl = ingredientImageUrl;
     }
-    // Getters and Setters omitted for brevity
+
+
 }

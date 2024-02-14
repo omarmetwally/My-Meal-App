@@ -8,14 +8,13 @@
     android:orientation="vertical"
     tools:context=".search.view.SearchFragment">
 
-    <!-- Custom styled SearchingView -->
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:queryHint="Search here..."
-        android:theme="@style/CustomSearchViewStyle"
+        android:theme="@style/Widget.AppCompat.SearchView.ActionBar"
         app:iconifiedByDefault="false"
         app:queryBackground="@android:color/transparent"
         app:searchIcon="@drawable/search"
@@ -24,7 +23,6 @@
 
         app:submitBackground="@android:color/transparent" />
 
-    <!-- RecyclerView for displaying search results -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results_recyclerview"

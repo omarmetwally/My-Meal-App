@@ -83,7 +83,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     @Override
     public int getItemCount() {
-        return ingredients != null ? ingredients.size() : 0;
+
+//        return ingredients != null ? ingredients.size() : 0;
+        return Math.min(ingredients.size(), 20);
     }
 
     public void setIngredients(List<Ingredient> ingredients) {

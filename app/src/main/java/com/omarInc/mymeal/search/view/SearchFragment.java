@@ -17,6 +17,7 @@ import androidx.appcompat.widget.SearchView;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
+import com.google.android.material.search.SearchBar;
 import com.omarInc.mymeal.R;
 import com.omarInc.mymeal.model.Meal;
 import com.omarInc.mymeal.network.MealRemoteDataSourceImpl;
