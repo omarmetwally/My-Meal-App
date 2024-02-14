@@ -7,7 +7,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +26,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.omarInc.mymeal.R;
+import com.omarInc.mymeal.db.MealRepository;
+import com.omarInc.mymeal.db.MealRepositoryImpl;
 import com.omarInc.mymeal.mealdetails.presenter.MealDetailsPresenter;
 import com.omarInc.mymeal.mealdetails.presenter.MealDetailsPresenterImpl;
 import com.omarInc.mymeal.model.MealDetail;
@@ -38,12 +42,13 @@ import java.util.ArrayList;
 public class MealDetailsFragment extends Fragment implements MealDetailView {
 
     ProgressBar progressBar;
-    private ImageView foodCoverImg,btnBackImage,recipeYouTube;
+    private ImageView foodCoverImg,btnBackImage,recipeYouTube,detailFav;
     private YouTubePlayerView youTubePlayerView ;
     private TextView foodCategoryTxt, foodAreaTxt, foodTitleTxt, foodDescTxt;
     private RecyclerView ingredientsRecyclerView;
     private MealDetailsPresenter presenter;
     private  Ingredients_MeasuesAdapter ingredientsMeasuesAdapter;
+    private boolean isOffline;
 
 
     public MealDetailsFragment() {
@@ -85,6 +90,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
         btnBackImage=view.findViewById(R.id.detailBack);
         recipeYouTube=view.findViewById(R.id.recipeYouTube);
         youTubePlayerView = view.findViewById(R.id.youtube_player_view);
+        detailFav=view.findViewById(R.id.detailFav);
+
         ingredientsRecyclerView=view.findViewById(R.id.ingredientRecyclerView);
         ingredientsRecyclerView.setHasFixedSize(true);
         LinearLayoutManager categoriesLayoutManager = new LinearLayoutManager(getActivity());
@@ -96,13 +103,16 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
         ingredientsMeasuesAdapter = new Ingredients_MeasuesAdapter(getContext(), new ArrayList<>());
         ingredientsRecyclerView.setAdapter(ingredientsMeasuesAdapter);
 
-        presenter = new MealDetailsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
+        MealRepository repository = MealRepositoryImpl.getInstance(getContext());
+
+        presenter = new MealDetailsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance(),repository);
         if (getArguments() != null) {
             String mealID = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealID();
-            presenter.fetchMealDetails(mealID);
+             isOffline = MealDetailsFragmentArgs.fromBundle(getArguments()).getIsOffline();
 
+            presenter.checkIfFavorite(mealID);
+            presenter.fetchMealDetails(mealID,isOffline);
 
-            Toast.makeText(getActivity(), "Meal ID "+mealID, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -122,6 +132,13 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
                 Navigation.findNavController(view).navigateUp();
             }
         });
+        detailFav.setOnClickListener(v -> {
+            // Assuming 'mealDetail' is the instance of MealDetail you want to save.
+//            MealRepositoryImpl.getInstance(getContext()).insert(mealDetail);
+            presenter.onFavoriteClicked(mealDetail);
+//            detailFav.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red), android.graphics.PorterDuff.Mode.MULTIPLY);
+        });
+
 
         ingredientsMeasuesAdapter.setIngredientsAndMeasures(mealDetail.getNonEmptyIngredientsAndMeasures());
 
@@ -150,6 +167,22 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
 
 
     }
+
+    @Override
+    public void setFavoriteStatus(boolean isFavorite) {
+
+        if(isFavorite) {
+            detailFav.setColorFilter(ContextCompat.getColor(getContext(), R.color.red));
+        } else {
+            detailFav.setColorFilter(ContextCompat.getColor(getContext(), R.color.white));
+        }
+    }
+
+    @Override
+    public LifecycleOwner getLifecycleOwner() {
+        return getViewLifecycleOwner();
+    }
+
     private void openYouTubeVideo(String url) {
         if (url != null && !url.isEmpty()) {
             String videoId = extractYouTubeVideoId(url);

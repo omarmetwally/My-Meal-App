@@ -6,9 +6,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +19,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.omarInc.mymeal.Login.presenter.LoginPresenter;
 import com.omarInc.mymeal.Login.presenter.LoginPresenterImpl;
 import com.omarInc.mymeal.MainActivity2;
+import com.omarInc.mymeal.MainSplashScreenActivity;
 import com.omarInc.mymeal.R;
+import com.omarInc.mymeal.db.MealRepositoryImpl;
 import com.omarInc.mymeal.firebase.FirebaseAuthDataSourceImpl;
 import com.omarInc.mymeal.firebase.IFirebaseAuth;
 
@@ -31,12 +42,14 @@ import com.omarInc.mymeal.firebase.IFirebaseAuth;
 public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
 
 
+    private  final int RC_SIGN_IN = 9001;
     TextView txtRegister,txtForgetPassword;
     NavController navController;
     Button btnSkip;
     TextInputEditText emailEditText,passwordEditText;
     CircularProgressButton btnLogin;
     private LoginPresenter presenter;
+    private GoogleSignInClient mGoogleSignInClient;
 
     public static LoginFragment newInstance(String param1, String param2) {
         LoginFragment fragment = new LoginFragment();
@@ -63,6 +76,14 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)) // Get the web client ID from strings.xml
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+
+        SignInButton signInButton = view.findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener(v -> startGoogleSignIn());
 
         txtForgetPassword=view.findViewById(R.id.txtForgetPassword);
         btnSkip=view.findViewById(R.id.btnSkip);
@@ -71,8 +92,7 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
         btnLogin=view.findViewById(R.id.btnLogin);
         txtRegister=view.findViewById(R.id.txtRegisterNow);
         IFirebaseAuth authManager = new FirebaseAuthDataSourceImpl();
-        presenter = new LoginPresenterImpl(this, authManager,getContext());
-
+        presenter = new LoginPresenterImpl(this, authManager, getContext(), MealRepositoryImpl.getInstance(getActivity()));
         txtRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,5 +188,57 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     public void showMessage(String message) {
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
 
+    }
+
+    @Override
+    public void onGoogleLoginSuccess(String userID) {
+
+        Snackbar.make(getView(), "Login Successfully"+userID, BaseTransientBottomBar.LENGTH_LONG).show();
+
+        presenter.saveAuthToken(userID);
+
+        Intent i = new Intent(getActivity(), MainActivity2.class);
+        startActivity(i);
+        getActivity().finish();
+
+    }
+
+    @Override
+    public void onGoogleLoginError(String message) {
+        Snackbar.make(getView(), message, BaseTransientBottomBar.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onMealsFetchedAndStoredSuccessfully() {
+
+
+    }
+
+    public void startGoogleSignIn() {
+        // Here you will start the Google Sign-In process
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign-In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                presenter.performGoogleLogin_firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                // Google Sign-In failed
+             //   Log.w(TAG, "Google sign in failed", e);
+            }
+        }
+    }
+    @Override
+    public LifecycleOwner getLifecycleOwner() {
+        return getViewLifecycleOwner();
     }
 }

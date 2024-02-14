@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import me.ibrahimsn.lib.SmoothBottomBar;
+
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -41,8 +41,9 @@ public class MainActivity2 extends AppCompatActivity {
     NavController navController;
     private BottomNavigationView bottomNavigationView;
 
-    private SmoothBottomBar smoothBottomBar;
+    private TextView btnTurnOnWifi,btnDismiss;
     private static final String TAG = "MainActivity2";
+    private View banner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +51,12 @@ public class MainActivity2 extends AppCompatActivity {
         //Check Network
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeReceiver, filter);
-        TextView btnTurnOnWifi = findViewById(R.id.buttonTurnOnWifi);
+         btnTurnOnWifi = findViewById(R.id.buttonTurnOnWifi);
+        btnDismiss= findViewById(R.id.btnDismiss);
         btnTurnOnWifi.setOnClickListener(view -> {
             startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
         });
-
+        btnDismiss.setOnClickListener(view -> banner.setVisibility(View.GONE));
 
         ////****** Bottom Nav el 2adema
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
@@ -76,7 +78,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     private void showNetworkBanner(boolean noConnectivity) {
         runOnUiThread(() -> {
-            View banner = findViewById(R.id.networkBanner);
+            banner = findViewById(R.id.networkBanner);
             banner.setVisibility(noConnectivity ? View.VISIBLE : View.GONE);
         });
     }

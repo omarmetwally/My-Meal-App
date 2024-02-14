@@ -12,6 +12,9 @@ dependencyResolutionManagement {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
+    ext {
+        viewpager = '1.0.0'
+    }
 }
 
 rootProject.name = "MyMeal"

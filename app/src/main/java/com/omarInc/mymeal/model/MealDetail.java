@@ -2,12 +2,20 @@ package com.omarInc.mymeal.model;
 
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MealDetail {
+@Entity(tableName = "meal_table")
+public class MealDetail implements Serializable {
+    @PrimaryKey
+    @NonNull
     @SerializedName("idMeal")
     private String idMeal;
 
@@ -34,6 +42,16 @@ public class MealDetail {
 
     @SerializedName("strYoutube")
     private String strYoutube;
+//    @SerializedName("ingredientsMeasures")
+//    private List<Pair<String, String>> ingredientsMeasures;
+//
+//    public List<Pair<String, String>> getIngredientsMeasures() {
+//        return ingredientsMeasures;
+//    }
+//
+//    public void setIngredientsMeasures(List<Pair<String, String>> ingredientsMeasures) {
+//        this.ingredientsMeasures = ingredientsMeasures;
+//    }
 
     // Ingredients
     @SerializedName("strIngredient1")

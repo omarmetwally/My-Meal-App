@@ -42,9 +42,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="14dp"
+        android:layout_marginEnd="7dp"
         android:layout_marginBottom="10dp"
-        android:text="TURN ON WIFI"
+        android:text="@string/TURN_ON_WIFI"
+        android:textColor="@color/backgrounds" />
+
+    <TextView
+        android:id="@+id/btnDismiss"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="13dp"
+        android:layout_marginBottom="10dp"
+        android:layout_toStartOf="@+id/buttonTurnOnWifi"
+        android:text="@string/dismiss"
         android:textColor="@color/backgrounds" />
 
 </RelativeLayout>

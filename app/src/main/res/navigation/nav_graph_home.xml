@@ -25,12 +25,16 @@
     </fragment>
     <fragment
         android:id="@+id/savedFragment"
-        android:name="com.omarInc.mymeal.favorite.SavedFragment"
+        android:name="com.omarInc.mymeal.favorite.view.SavedFragment"
         android:label="fragment_saved"
-        tools:layout="@layout/fragment_saved" />
+        tools:layout="@layout/fragment_saved" >
+        <action
+            android:id="@+id/action_savedFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.omarInc.mymeal.profile.ProfileFragment"
+        android:name="com.omarInc.mymeal.profile.view.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
@@ -41,5 +45,8 @@
         <argument
             android:name="meal_ID"
             app:argType="string" />
+        <argument
+            android:name="isOffline"
+            app:argType="boolean" />
     </fragment>
 </navigation>

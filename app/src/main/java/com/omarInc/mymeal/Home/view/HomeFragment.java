@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
+
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.omarInc.mymeal.area.model.Area;
 import com.omarInc.mymeal.area.presenter.AreasPresenter;
@@ -33,7 +34,6 @@ import com.omarInc.mymeal.ingredients.presenter.IngredientsPresenter;
 import com.omarInc.mymeal.ingredients.presenter.IngredientsPresenterImpl;
 import com.omarInc.mymeal.ingredients.view.IngredientsAdapter;
 import com.omarInc.mymeal.ingredients.view.IngredientsView;
-import com.omarInc.mymeal.mealdetails.view.MealDetailsFragment;
 import com.omarInc.mymeal.model.Category;
 
 import com.omarInc.mymeal.model.Ingredient;
@@ -41,10 +41,10 @@ import com.omarInc.mymeal.model.Meal;
 import com.omarInc.mymeal.network.MealRemoteDataSourceImpl;
 import com.omarInc.mymeal.recommendedMeals.presenter.RecommendedMealsPresenter;
 import com.omarInc.mymeal.recommendedMeals.presenter.RecommendedMealsPresenterImpl;
-import com.omarInc.mymeal.recommendedMeals.view.MealsAdapter;
+import com.omarInc.mymeal.model.MealsAdapter;
 import com.omarInc.mymeal.recommendedMeals.view.RecommendedMealsView;
+import com.omarInc.mymeal.recommendedMeals.view.ViewPagerStack;
 import com.stack.viewpager.OrientedViewPager;
-import com.stack.viewpager.transformer.VerticalStackTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,24 +121,35 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
 
       recommendedMealsPresenter = new RecommendedMealsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
         recommendedMealsPresenter.fetchRecommendedMeals();
-
-        recommendedRecyclerView = view.findViewById(R.id.recommendedRecView);
-        recommendedRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager recommendedLayoutManager = new LinearLayoutManager(getActivity());
-        recommendedLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        recommendedRecyclerView.setLayoutManager(recommendedLayoutManager);
+//
+//        recommendedRecyclerView = view.findViewById(R.id.recommendedRecView);
+//        recommendedRecyclerView.setHasFixedSize(true);
+//        LinearLayoutManager recommendedLayoutManager = new LinearLayoutManager(getActivity());
+//        recommendedLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+//
+//        recommendedRecyclerView.setLayoutManager(recommendedLayoutManager);
 
         //  recyclerViewCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mealsAdapter = new MealsAdapter(getContext(), new ArrayList<>(),mealId -> {
 
 
             HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action=
-                    HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealId);
+                    HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealId,false);
             NavHostFragment.findNavController(HomeFragment.this).navigate(action);
 
-        });
-        recommendedRecyclerView.setAdapter(mealsAdapter);
+        },R.layout.stack_meal_item);
+//        recommendedRecyclerView.setAdapter(mealsAdapter);
 
+
+        ViewPager2 viewPager21 = view.findViewById(R.id.viewPager);
+
+        viewPager21.setPageTransformer(new ViewPagerStack());
+
+
+       viewPager21.setOffscreenPageLimit(2);
+        viewPager21.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+
+        viewPager21.setAdapter(mealsAdapter);
 
 
 

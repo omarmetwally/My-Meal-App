@@ -1,4 +1,4 @@
-package com.omarInc.mymeal.recommendedMeals.view;
+package com.omarInc.mymeal.model;
 
 
 import android.content.Context;
@@ -27,8 +27,6 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator;
 import com.omarInc.mymeal.R;
-import com.omarInc.mymeal.model.Meal;
-import com.omarInc.mymeal.model.OnMealClickListener;
 
 import java.util.List;
 
@@ -37,18 +35,20 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
     private List<Meal> meals;
     private Context context;
     private OnMealClickListener listener;
+    private int layoutResId;
 
-    public MealsAdapter(Context context, List<Meal> meals,OnMealClickListener listener) {
+    public MealsAdapter(Context context, List<Meal> meals,OnMealClickListener listener,int layoutResId) {
         this.context = context;
         this.meals = meals;
         this.listener = listener;
+        this.layoutResId = layoutResId;
 
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.meal_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(layoutResId, parent, false);
         return new ViewHolder(view);
     }
 
@@ -106,6 +106,22 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
     public void setMeals(List<Meal> meals) {
         this.meals = meals;
         notifyDataSetChanged();
+    }
+
+    public Meal getMealAt(int position) {
+        return meals.get(position);
+    }
+    public void removeAt(int position) {
+        if (position >= 0 && position < meals.size()) {
+            meals.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    // Insert an item into the adapter's dataset
+    public void insertAt(int position, Meal meal) {
+        meals.add(position, meal);
+        notifyItemInserted(position);
     }
 
     @Override

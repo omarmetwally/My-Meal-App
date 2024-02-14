@@ -12,7 +12,20 @@
           "package_name": "com.omarInc.mymeal"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "220572722289-4sqjhuattfqoh93t6ifmiq605ck4ffmv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.omarInc.mymeal",
+            "certificate_hash": "698c6437ce9b3ede55946240ec730ee18197cd0a"
+          }
+        },
+        {
+          "client_id": "220572722289-60loitdqloct6g26om5ibbqei6mv2vvd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD94zF-fWWQ6E852yP7kpDCVF2PEGkmECU"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "220572722289-60loitdqloct6g26om5ibbqei6mv2vvd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

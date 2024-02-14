@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.omarInc.mymeal.R;
 import com.omarInc.mymeal.area.model.Area;
-import com.omarInc.mymeal.recommendedMeals.view.MealsAdapter;
 
 import java.util.List;
 

@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.omarInc.mymeal.R;
-import com.omarInc.mymeal.recommendedMeals.view.MealsAdapter;
 
 
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {

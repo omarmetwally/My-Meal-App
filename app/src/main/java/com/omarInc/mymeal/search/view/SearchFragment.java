@@ -17,13 +17,10 @@ import androidx.appcompat.widget.SearchView;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
-import com.omarInc.mymeal.Home.view.HomeFragment;
-import com.omarInc.mymeal.Home.view.HomeFragmentDirections;
 import com.omarInc.mymeal.R;
-import com.omarInc.mymeal.mealdetails.view.MealDetailsFragment;
 import com.omarInc.mymeal.model.Meal;
 import com.omarInc.mymeal.network.MealRemoteDataSourceImpl;
-import com.omarInc.mymeal.recommendedMeals.view.MealsAdapter;
+import com.omarInc.mymeal.model.MealsAdapter;
 import com.omarInc.mymeal.search.presenter.SearchPresenter;
 import com.omarInc.mymeal.search.presenter.SearchPresenterImpl;
 
@@ -78,9 +75,9 @@ public class SearchFragment extends Fragment implements SearchingView {
         adapter = new MealsAdapter(getContext(), new ArrayList<>(),mealId -> {
 
             SearchFragmentDirections.ActionSearchFragmentToMealDetailsFragment action=
-                    SearchFragmentDirections.actionSearchFragmentToMealDetailsFragment(mealId);
+                    SearchFragmentDirections.actionSearchFragmentToMealDetailsFragment(mealId,false);
             NavHostFragment.findNavController(SearchFragment.this).navigate(action);
-        });
+        },R.layout.meal_item);
 
         searchResultsRecyclerView.setAdapter(adapter);
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_scale_in);

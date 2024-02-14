@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.omarInc.mymeal.MainActivity2;
 import com.omarInc.mymeal.R;
@@ -85,6 +86,7 @@ public class SplashFragment extends Fragment implements SplashView {
         Intent i = new Intent(getActivity(), MainActivity2.class);
         startActivity(i);
        getActivity().finish();
+        Toast.makeText(getActivity(), "token :"+authToken, Toast.LENGTH_SHORT).show();
     }
 
     @Override

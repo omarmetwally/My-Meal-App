@@ -12,6 +12,14 @@ public class Meal {
     @SerializedName("idMeal")
     private String idMeal;
 
+    public Meal(String strMeal, String strMealThumb, String idMeal) {
+        this.strMeal = strMeal;
+        this.strMealThumb = strMealThumb;
+        this.idMeal = idMeal;
+    }
+
+
+
     public String getStrMeal() {
         return strMeal;
     }
