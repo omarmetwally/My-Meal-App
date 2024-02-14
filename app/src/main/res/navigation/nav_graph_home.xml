@@ -54,7 +54,24 @@
     </fragment>
     <fragment
         android:id="@+id/ingredientSearchFragment"
-        android:name="com.omarInc.mymeal.IngredientSearchFragment"
-        android:label="fragment_ingredient_search"
-        tools:layout="@layout/fragment_ingredient_search" />
+        android:name="com.omarInc.mymeal.detailsSearch.view.IngredientSearchFragment"
+        android:label="@string/Search"
+        tools:layout="@layout/fragment_ingredient_search">
+        <argument
+            android:name="ingradientsList"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_ingredientSearchFragment_self"
+            app:destination="@id/ingredientSearchFragment" />
+        <argument
+            android:name="responseTypeNumber"
+            app:argType="integer" />
+        <argument
+            android:name="responseTypeName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_ingredientSearchFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
 </navigation>

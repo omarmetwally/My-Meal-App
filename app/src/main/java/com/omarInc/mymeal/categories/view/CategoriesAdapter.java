@@ -32,13 +32,15 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     private List<Category> categories;
     private LayoutInflater inflater;
     private  final Context context;
+    private  OnCategoryClickListener listener;
 
 
 
-    public CategoriesAdapter(Context context, List<Category> categories) {
+    public CategoriesAdapter(Context context, List<Category> categories,OnCategoryClickListener listener) {
         this.context=context;
         this.inflater = LayoutInflater.from(context);
         this.categories = categories;
+        this.listener=listener;
     }
 
     @Override
@@ -76,6 +78,13 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
                 })
 //                .placeholder(R.layout.shimmer_placeholder)
                 .error(R.drawable.image_not_found_icon).into(holder.imageView);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onCategoryClick(categories.get(position).getStrCategory());
+            }
+        });
+
 
     }
 

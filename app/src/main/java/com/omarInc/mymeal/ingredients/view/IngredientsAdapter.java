@@ -3,6 +3,7 @@ package com.omarInc.mymeal.ingredients.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.omarInc.mymeal.R;
 import com.omarInc.mymeal.categories.view.CategoriesAdapter;
 import com.omarInc.mymeal.model.Ingredient;
+import com.omarInc.mymeal.model.OnMealClickListener;
 
 import java.util.List;
 
@@ -31,11 +33,16 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     private List<Ingredient> ingredients;
     private final LayoutInflater inflater;
     private final Context context;
+    private  boolean seeMore;
+    private OnIngredientsClickListener listener;
+    private static final String TAG = "IngredientsAdapter";
 
-    public IngredientsAdapter(Context context, List<Ingredient> ingredients) {
+    public IngredientsAdapter(Context context, List<Ingredient> ingredients, boolean seeMore,OnIngredientsClickListener listener) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.ingredients = ingredients;
+        this.seeMore = seeMore;
+        this.listener=listener;
     }
 
     @NonNull
@@ -79,13 +86,26 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 //                .placeholder(R.layout.shimmer_placeholder)
                 .error(R.drawable.image_not_found_icon)
                 .into(holder.imgIngredient);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                Log.i(TAG, "onBindViewHolder: Omarrrrrrr");
+                listener.onIngredientClick(ingredient.getStrIngredient());
+            }
+        });
+
+
+
     }
 
     @Override
     public int getItemCount() {
 
-//        return ingredients != null ? ingredients.size() : 0;
-        return Math.min(ingredients.size(), 20);
+        if (!seeMore) {
+            return Math.min(ingredients.size(), 20);
+        }
+        return ingredients != null ? ingredients.size() : 0;
+
     }
 
     public void setIngredients(List<Ingredient> ingredients) {
@@ -108,7 +128,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             super(itemView);
             txtIngredientName = itemView.findViewById(R.id.txtMealName);
             imgIngredient = itemView.findViewById(R.id.itemImage);
-            shimmerViewContainer=itemView.findViewById(R.id.shimmer_view_container);
+            shimmerViewContainer = itemView.findViewById(R.id.shimmer_view_container);
         }
     }
 }

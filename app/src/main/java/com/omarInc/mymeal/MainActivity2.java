@@ -67,7 +67,7 @@ public class MainActivity2 extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if(destination.getId() == R.id.mealDetailsFragment) {
+            if(destination.getId() == R.id.mealDetailsFragment || destination.getId() == R.id.ingredientSearchFragment) {
                 bottomNavigationView.setVisibility(View.GONE);
             } else {
                 bottomNavigationView.setVisibility(View.VISIBLE);

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.gson.Gson;
 import com.omarInc.mymeal.area.model.Area;
 import com.omarInc.mymeal.area.presenter.AreasPresenter;
 import com.omarInc.mymeal.area.presenter.AreasPresenterImpl;
@@ -212,7 +214,13 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         ingredientsLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         areaRecyclerView.setLayoutManager(ingredientsLayoutManager);
 
-        areasAdapter = new AreasAdapter(getContext(), new ArrayList<>());
+        areasAdapter = new AreasAdapter(getContext(), new ArrayList<>(),areaName->{
+
+            HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action=
+                    HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(null,3,areaName);
+            NavHostFragment.findNavController(HomeFragment.this).navigate(action);
+
+        });
         areaRecyclerView.setAdapter(areasAdapter);
     }
 
@@ -231,7 +239,11 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_scale_in);
         ingredientsRecyclerView.setLayoutAnimation(animation);
 
-        ingredientsAdapter = new IngredientsAdapter(getContext(), new ArrayList<>());
+        ingredientsAdapter = new IngredientsAdapter(getContext(), new ArrayList<>(),false,ingredientId->{
+            HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action=
+                    HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(null,2,ingredientId);
+            NavHostFragment.findNavController(HomeFragment.this).navigate(action);
+        });
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);
     }
 
@@ -248,7 +260,11 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         categoriesRecyclerView.setLayoutAnimation(animation);
 
         //  recyclerViewCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        categoriesAdapter = new CategoriesAdapter(getContext(), new ArrayList<>());
+        categoriesAdapter = new CategoriesAdapter(getContext(), new ArrayList<>(),categoryId->{
+            HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action=
+                    HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(null,1,categoryId);
+            NavHostFragment.findNavController(HomeFragment.this).navigate(action);
+        });
         categoriesRecyclerView.setAdapter(categoriesAdapter);
     }
 
@@ -276,11 +292,16 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         }
 
 
-        IngredientsManager.getInstance().setIngredients(ingredients);
         seeMoreTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Gson gson = new Gson();
+                String ingredientsJson = gson.toJson(ingredients);
 
+                Log.i(TAG, "ingredientsJson: "+ingredientsJson);
+                HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action=
+                        HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(ingredientsJson,0,"");
+                NavHostFragment.findNavController(HomeFragment.this).navigate(action);
             }
         });
     }
