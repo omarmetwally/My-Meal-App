@@ -18,14 +18,11 @@ public class MainSplashScreenActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
     }
+
+
+
     @Override
     public boolean onSupportNavigateUp() {
         return navController.navigateUp() || super.onSupportNavigateUp();
     }
-//    @Override
-//    public void onBackPressed() {
-//        if (!navController.navigateUp()) {
-//            super.onBackPressed();
-//        }
-//    }
 }

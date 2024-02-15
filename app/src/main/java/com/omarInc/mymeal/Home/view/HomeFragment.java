@@ -75,7 +75,6 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
 
 
     private OrientedViewPager mOrientedViewPager;
-    //private StackFragmentAdapter mContentFragmentAdapter;
     private List<Fragment> mFragments = new ArrayList<>();
     public HomeFragment() {
         // Required empty public constructor
@@ -93,6 +92,10 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.i(TAG, "onCreate: ");
+
+
 
     }
 

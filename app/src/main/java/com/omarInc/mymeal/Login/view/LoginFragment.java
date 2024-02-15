@@ -1,5 +1,6 @@
 package com.omarInc.mymeal.Login.view;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -77,7 +78,7 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)) // Get the web client ID from strings.xml
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
@@ -87,6 +88,7 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
 
         txtForgetPassword=view.findViewById(R.id.txtForgetPassword);
         btnSkip=view.findViewById(R.id.btnSkip);
+        btnSkip.setOnClickListener(view1 -> showOfflineDialog());
         emailEditText=view.findViewById(R.id.emailLoginEditTetx);
         passwordEditText=view.findViewById(R.id.passwordLoginEditText);
         btnLogin=view.findViewById(R.id.btnLogin);
@@ -118,7 +120,6 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     @Override
     public void onLoginClickListener(String email, String password) {
 
-      //  Toast.makeText(getActivity(), email, Toast.LENGTH_SHORT).show();
         presenter.performLogin(email, password);
     }
 
@@ -136,14 +137,12 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     }
 
     @Override
-    public void onLoginSuccess(String userID) {
-        Snackbar.make(getView(), "Login Successfully"+userID, BaseTransientBottomBar.LENGTH_LONG).show();
+    public void onLoginSuccess(String userID,String email) {
+        Snackbar.make(getView(), R.string.loginSuccessfully, BaseTransientBottomBar.LENGTH_LONG).show();
 
         presenter.saveAuthToken(userID);
-//        LoginFragmentDirections.ActionLoginFragmentToHomeFragment action =
-//                LoginFragmentDirections.actionLoginFragmentToHomeFragment("");
-//        action.setAuthID(userID);
-//        navController.navigate(action);
+        presenter.saveEmail(email);
+
         Intent i = new Intent(getActivity(), MainActivity2.class);
         startActivity(i);
         getActivity().finish();
@@ -161,18 +160,18 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     @Override
     public boolean validateInput(String email, String password) {
         if (email.isEmpty()) {
-            emailEditText.setError("Email cannot be empty");
-            showMessage("Email cannot be empty");
+            emailEditText.setError(String.valueOf(R.string.emailEmpty));
+            showMessage(String.valueOf(R.string.emailEmpty));
             return false;
         }
         if (password.isEmpty()) {
-            passwordEditText.setError("Password cannot be empty");
-            showMessage("Password cannot be empty");
+            passwordEditText.setError(String.valueOf(R.string.passwordEmpty));
+            showMessage(String.valueOf(R.string.passwordEmpty));
             return false;
         }
         if (!isValidEmail(email)) {
-            emailEditText.setError("Invalid email format");
-            showMessage("Invalid email format");
+            emailEditText.setError(String.valueOf(R.string.invalidEmail));
+            showMessage(String.valueOf(R.string.invalidEmail));
             return false;
         }
         return true;
@@ -191,11 +190,12 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     }
 
     @Override
-    public void onGoogleLoginSuccess(String userID) {
+    public void onGoogleLoginSuccess(String userID,String email) {
 
-        Snackbar.make(getView(), "Login Successfully"+userID, BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar.make(getView(), "Login Successfully", BaseTransientBottomBar.LENGTH_LONG).show();
 
         presenter.saveAuthToken(userID);
+        presenter.saveEmail(email);
 
         Intent i = new Intent(getActivity(), MainActivity2.class);
         startActivity(i);
@@ -216,7 +216,6 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     }
 
     public void startGoogleSignIn() {
-        // Here you will start the Google Sign-In process
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
 
@@ -228,11 +227,10 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign-In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                presenter.performGoogleLogin_firebaseAuthWithGoogle(account.getIdToken());
+                presenter.performGoogleLogin_firebaseAuthWithGoogle(account.getIdToken(),account.getEmail());
             } catch (ApiException e) {
-                // Google Sign-In failed
+
              //   Log.w(TAG, "Google sign in failed", e);
             }
         }
@@ -240,5 +238,21 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     @Override
     public LifecycleOwner getLifecycleOwner() {
         return getViewLifecycleOwner();
+    }
+
+
+    private void showOfflineDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.WaitSure)
+                .setMessage(R.string.miss)
+                .setPositiveButton(R.string.YesSure, (dialog, which) -> navigateToHome())
+                .setNegativeButton(R.string.NoReturn, (dialog, which) -> dialog.dismiss())
+                .create().show();
+    }
+
+    private void navigateToHome() {
+        Intent i = new Intent(getActivity(), MainActivity2.class);
+        startActivity(i);
+        getActivity().finish();
     }
 }

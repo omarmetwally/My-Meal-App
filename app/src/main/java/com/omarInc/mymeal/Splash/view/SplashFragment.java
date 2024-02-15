@@ -58,7 +58,7 @@ public class SplashFragment extends Fragment implements SplashView {
 
 //
 //                if (SharedPreferencesDataSourceImpl.getInstance(requireContext()).getAuthToken() != null) {
-//                    // If token exists, navigate to HomeHostFragment
+//
 //                    SplashFragmentDirections.ActionSplashFragmentToHomeFragment action=
 //                            SplashFragmentDirections.
 //                                    actionSplashFragmentToHomeFragment("");
@@ -76,13 +76,9 @@ public class SplashFragment extends Fragment implements SplashView {
     }
 
     @Override
-    public void navigateToHome(String authToken) {
+    public void navigateToHome() {
 
-//        NavController navController = Navigation.findNavController(requireView());
-//        SplashFragmentDirections.ActionSplashFragmentToHomeFragment action =
-//                SplashFragmentDirections.actionSplashFragmentToHomeFragment("");
-//        action.setAuthID(authToken);
-//        navController.navigate(action);
+
         Intent i = new Intent(getActivity(), MainActivity2.class);
         startActivity(i);
        getActivity().finish();

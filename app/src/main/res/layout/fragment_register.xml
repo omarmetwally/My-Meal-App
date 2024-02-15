@@ -77,7 +77,8 @@
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/register_name_hint">
+                        android:hint="@string/register_name_hint"
+                        android:visibility="gone">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/nameEditText"

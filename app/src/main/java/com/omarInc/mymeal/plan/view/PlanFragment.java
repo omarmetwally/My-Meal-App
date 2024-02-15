@@ -136,8 +136,8 @@ public class PlanFragment extends Fragment implements PlanView {
 
                 mealsAdapter.removeAt(position);
 
-                Snackbar snackbar = Snackbar.make(mealsRecyclerView, "Meal removed", Snackbar.LENGTH_SHORT);
-                snackbar.setAction("Undo", view -> {
+                Snackbar snackbar = Snackbar.make(mealsRecyclerView, R.string.MealRemoved, Snackbar.LENGTH_SHORT);
+                snackbar.setAction(R.string.Undo, view -> {
                     mealsAdapter.insertAt(position, deletedMeal);
                 });
                 snackbar.addCallback(new Snackbar.Callback() {

@@ -26,7 +26,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         this.view = view;
         this.authManager = authManager;
         this.context = context;
-        this.mealRepository = mealRepository; // Initialize mealRepository
+        this.mealRepository = mealRepository;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             @Override
             public void onSuccess(String UserID) {
                 view.hideLoading();
-                view.onLoginSuccess(UserID);
+                view.onLoginSuccess(UserID,email);
                 fetchAndStoreUserMeals(UserID);
                 fetchAndStoreUserScheduledMeals(UserID);
             }
@@ -55,14 +55,18 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override
-    public void performGoogleLogin_firebaseAuthWithGoogle(String idToken) {
-        // You'll need to implement the Google Sign-In logic here and call view.onGoogleLoginSuccess(userID) or view.onGoogleLoginError(errorMessage) accordingly.
-        // For now, let's just call a method that starts the Google Sign-In process
+    public void saveEmail(String email) {
+        SharedPreferencesDataSourceImpl.getInstance(context).saveEmail(email);
+    }
+
+    @Override
+    public void performGoogleLogin_firebaseAuthWithGoogle(String idToken,String email) {
+
 
         authManager.signInWithGoogle(idToken, new IFirebaseAuth.AuthResultCallback() {
             @Override
             public void onSuccess(String userId) {
-                view.onGoogleLoginSuccess(userId);
+                view.onGoogleLoginSuccess(userId,email);
                 fetchAndStoreUserMeals(userId);
                 fetchAndStoreUserScheduledMeals(userId);
             }
@@ -82,10 +86,8 @@ public class LoginPresenterImpl implements LoginPresenter {
         authManager.fetchMeals(userId, new IFirebaseAuth.DataFetchCallback<List<MealDetail>>() {
             @Override
             public void onSuccess(List<MealDetail> meals) {
-                // Use a separate thread or AsyncTask for database operations
                 new Thread(() -> {
-                    mealRepository.insertAll(meals); // Assuming insertAll is a method in MealRepository for inserting a list of MealDetail
-                    // Notify the UI thread about the success
+                    mealRepository.insertAll(meals);
                     if (view != null) {
                        view.onMealsFetchedAndStoredSuccessfully();
                     }
@@ -113,8 +115,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             public void onSuccess(List<ScheduledMeal> data) {
 
                 new Thread(() -> {
-                    mealRepository.insertAllScheduledMeals(data); // Assuming insertAll is a method in MealRepository for inserting a list of MealDetail
-                    // Notify the UI thread about the success
+                    mealRepository.insertAllScheduledMeals(data);
 
                 }).start();
             }

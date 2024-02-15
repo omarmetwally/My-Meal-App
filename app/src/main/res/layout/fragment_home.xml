@@ -230,9 +230,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="Recommended meals"
-            android:textSize="18sp"
+            android:text="@string/Recommended_meals"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
 <!--        <androidx.recyclerview.widget.RecyclerView-->
@@ -252,7 +252,8 @@
 
             android:layout_marginBottom="8dp"
             android:text="@string/Categories"
-            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -271,7 +272,8 @@
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:text="@string/Ingrediens"
-                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -280,7 +282,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="@string/See_more"
-                android:textColor="@color/backgrounds" />
+                android:textColor="@color/backgrounds"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <!-- Horizontal scroll or RecyclerView for popular meals -->
@@ -303,7 +306,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:text="@string/Countries"
-            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView

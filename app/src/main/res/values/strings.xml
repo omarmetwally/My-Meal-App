@@ -44,6 +44,44 @@
     <string name="anotherMethod">Use other Methods</string>
     <string name="firstTime">Here\'s\nyour first\nstep with\nus!</string>
     <string name="Register">Register</string>
+    <string name="email">email</string>
+    <string name="AreSure">Are you sure you want to log out?</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+   <string name="NoInterNet">No Internet Connection</string>
+    <string name="CheckNetwork">Please check your internet connection and try again.</string>
+    <string name="BackupSucc">Backup Successfully</string>
+    <string name="ThankYou">Thank you! Your meals are safe now.</string>
+    <string name="WaitSure">Wait!Are you sure?</string>
+    <string name="miss">You\'ll miss out saving and planning your delicious meals</string>
+
+    <string name="YesSure">YES, I\'M SURE</string>
+
+    <string name="NoReturn">NO,LET ME LOGIN</string>
+
+    <string name="loginSuccessfully">Login Successfully</string>
+    <string name="registerSuccessfully">Register Successfully</string>
+
+
+    <string name="emailEmpty">Email cannot be empty</string>
+    <string name="passwordEmpty">Password cannot be empty</string>
+
+    <string name="passwordMatch">Password doesn\'t match.</string>
+
+    <string name="invalidEmail">Invalid email format</string>
+
+    <string name="featureNotAvailable">Feature Not Available For You</string>
+
+    <string name="signupTo">SignUp to unlock all features</string>
+
+    <string name="OkaySign">OKAY, SIGN UP</string>
+    <string name="NoSignUp">NO, THANKS</string>
+
+    <string name="MealRemoved">Meal removed</string>
+
+
+    <string name="Undo">Undo</string>
+    <string name="Recommended_meals">Recommended meals</string>
 
 
 </resources>

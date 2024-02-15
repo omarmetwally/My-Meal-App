@@ -106,7 +106,7 @@ public class RegisterFragment extends Fragment implements OnRegisterClick, Regis
     @Override
     public void onRegisterSuccess() {
 
-        Snackbar.make(getView(), "Register Successfully", BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar.make(getView(), R.string.registerSuccessfully, BaseTransientBottomBar.LENGTH_LONG).show();
         navController.popBackStack();
     }
 
@@ -119,23 +119,23 @@ public class RegisterFragment extends Fragment implements OnRegisterClick, Regis
     @Override
     public boolean validateInput(String name, String email, String password, String confirmPassword) {
         if (email.isEmpty()) {
-            emailEditText.setError("Email cannot be empty");
+            emailEditText.setError(String.valueOf(R.string.emailEmpty));
            // showMessage("Email cannot be empty");
             return false;
         }
         if (password.isEmpty()) {
-            passwordEditText.setError("Password cannot be empty");
+            passwordEditText.setError(String.valueOf(R.string.passwordEmpty));
            // showMessage("Password cannot be empty");
             return false;
         }
         if (!isValidEmail(email)) {
-            emailEditText.setError("Invalid email format");
+            emailEditText.setError(String.valueOf(R.string.invalidEmail));
           //  showMessage("Invalid email format");
             return false;
         }
         if(!password.equals(confirmPassword))
         {
-         confirmPasswordEditText.setError("Password doesn't match.");
+         confirmPasswordEditText.setError(String.valueOf(R.string.passwordMatch));
         }
         return true;
     }

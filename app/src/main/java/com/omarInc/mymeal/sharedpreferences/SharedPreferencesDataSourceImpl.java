@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 public class SharedPreferencesDataSourceImpl implements ISharedPreferencesDataSource {
     private static final String PREFERENCES_FILE_NAME = "Auth";
+    private static final String EMAIL = "email";
     private static final String AUTH_TOKEN_KEY = "auth_token";
 
     private static SharedPreferencesDataSourceImpl instance;
@@ -28,6 +29,18 @@ public class SharedPreferencesDataSourceImpl implements ISharedPreferencesDataSo
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(AUTH_TOKEN_KEY, token);
         editor.apply();
+    }
+
+    @Override
+    public void saveEmail(String email) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(EMAIL, email);
+        editor.apply();
+    }
+
+    @Override
+    public String getEmail() {
+        return sharedPreferences.getString(EMAIL, null);
     }
 
     @Override

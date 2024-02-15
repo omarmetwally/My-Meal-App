@@ -1,5 +1,6 @@
 package com.omarInc.mymeal.mealdetails.view;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -32,6 +33,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.omarInc.mymeal.Home.presenter.UserTypePresenter;
+import com.omarInc.mymeal.Home.presenter.UserTypePresenterImpl;
+import com.omarInc.mymeal.Home.view.UserTypeView;
 import com.omarInc.mymeal.R;
 import com.omarInc.mymeal.db.MealRepository;
 import com.omarInc.mymeal.db.MealRepositoryImpl;
@@ -40,6 +44,7 @@ import com.omarInc.mymeal.mealdetails.presenter.MealDetailsPresenterImpl;
 import com.omarInc.mymeal.model.MealDetail;
 import com.omarInc.mymeal.network.MealRemoteDataSourceImpl;
 import com.omarInc.mymeal.plan.model.ScheduledMeal;
+import com.omarInc.mymeal.sharedpreferences.SharedPreferencesDataSourceImpl;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -48,7 +53,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class MealDetailsFragment extends Fragment implements MealDetailView {
+public class MealDetailsFragment extends Fragment implements MealDetailView , UserTypeView {
 
     private static final String TAG = "MealDetailsFragment";
     ProgressBar progressBar;
@@ -60,6 +65,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
     private  Ingredients_MeasuesAdapter ingredientsMeasuesAdapter;
     private boolean isOffline,scrollState=false;
     private ScrollView scrollView;
+    private String  mealID;
+    private UserTypePresenter userTypePresenter;
 
 
     public MealDetailsFragment() {
@@ -79,13 +86,30 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.i(TAG, "onCreate: ");
+
+        userTypePresenter=new UserTypePresenterImpl(this, SharedPreferencesDataSourceImpl.getInstance(requireContext()));
+
+
     }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("mealID", MealDetailsFragmentArgs.fromBundle(getArguments()).getMealID());
+        outState.putBoolean("isOffline", MealDetailsFragmentArgs.fromBundle(getArguments()).getIsOffline());
+        Log.i(TAG, "onSaveInstanceState: dddd");
+    }
+    
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_meal_details, container, false);
+
 
     }
 
@@ -105,6 +129,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
         scroll_Image=view.findViewById(R.id.scroll_Image);
         scrollView=view.findViewById(R.id.scrollView);
         btnCalendar=view.findViewById(R.id.btnCalendar);
+        userTypePresenter.decideUserAction();
 
 
         scroll_Image.setOnClickListener(new View.OnClickListener() {
@@ -145,14 +170,22 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
         MealRepository repository = MealRepositoryImpl.getInstance(getContext());
 
         presenter = new MealDetailsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance(),repository);
-        if (getArguments() != null) {
-            String mealID = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealID();
-             isOffline = MealDetailsFragmentArgs.fromBundle(getArguments()).getIsOffline();
 
-            presenter.checkIfFavorite(mealID);
-            presenter.fetchMealDetails(mealID,isOffline);
+        if (savedInstanceState != null) {
+            mealID = savedInstanceState.getString("mealID");
+            isOffline = savedInstanceState.getBoolean("isOffline");
+
+            Log.i(TAG, "onViewCreated:savedInstanceState ");
+        }else if (getArguments() != null) {
+
+            Log.i(TAG, "onViewCreated: getArguments");
+            mealID = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealID();
+            isOffline = MealDetailsFragmentArgs.fromBundle(getArguments()).getIsOffline();
 
         }
+        presenter.checkIfFavorite(mealID);
+        presenter.fetchMealDetails(mealID, isOffline);
+
     }
 
     @Override
@@ -279,5 +312,28 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(), "No calendar app found", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void refreshContent() {
+        if (getArguments() != null) {
+//            String mealID = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealID();
+//            boolean isOffline = MealDetailsFragmentArgs.fromBundle(getArguments()).getIsOffline();
+            presenter.checkIfFavorite(mealID);
+            presenter.fetchMealDetails(mealID, isOffline);
+
+        }
+    }
+
+    @Override
+    public void userCanNotAccess() {
+        detailFav.setVisibility(View.GONE);
+       btnCalendar.setVisibility(View.GONE);
+    }
+
+
+
+    @Override
+    public void userCanAccess() {
+
     }
 }

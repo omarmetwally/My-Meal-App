@@ -19,7 +19,7 @@ public class SplashPresenterImpl implements SplashPresenter {
         String userId=sharedPreferences.getAuthToken();
         if ( userId!= null) {
 //            checkUserExists(userId);
-            view.navigateToHome(sharedPreferences.getAuthToken());
+            view.navigateToHome();
         } else {
             view.navigateToLogin();
         }

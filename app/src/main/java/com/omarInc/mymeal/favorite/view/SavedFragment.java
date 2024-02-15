@@ -110,8 +110,8 @@ public class SavedFragment extends Fragment implements FavoriteView {
 
                 adapter.removeAt(position);
 
-                Snackbar snackbar = Snackbar.make(favRecyclerView, "Meal removed", Snackbar.LENGTH_SHORT);
-                snackbar.setAction("Undo", view -> {
+                Snackbar snackbar = Snackbar.make(favRecyclerView, R.string.MealRemoved, Snackbar.LENGTH_SHORT);
+                snackbar.setAction(R.string.Undo, view -> {
                     adapter.insertAt(position, deletedMeal);
                 });
                 snackbar.addCallback(new Snackbar.Callback() {
