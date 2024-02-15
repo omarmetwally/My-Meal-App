@@ -15,6 +15,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.CalendarContract;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -172,9 +174,9 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
                         (views, year, month, dayOfMonth) -> {
                             Calendar selectedDate = Calendar.getInstance();
                             selectedDate.set(year, month, dayOfMonth);
-                            // Schedule the meal with selectedDate
 
                             presenter.scheduleMealForDate(mealDetail, selectedDate);
+                            addEventToCalendar(selectedDate, mealDetail.getStrMeal(), mealDetail.getStrInstructions());
                         },
                         now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
@@ -258,8 +260,24 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
     }
 
     private String extractYouTubeVideoId(String url) {
-        // Assuming the URL is in the format "http://www.youtube.com/watch?v=VIDEO_ID"
         Uri uri = Uri.parse(url);
         return uri.getQueryParameter("v");
+    }
+
+
+    private void addEventToCalendar(Calendar selectedDate, String title, String description) {
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+        intent.setData(CalendarContract.Events.CONTENT_URI);
+        intent.putExtra(CalendarContract.Events.TITLE, title);
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, description);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, selectedDate.getTimeInMillis());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, selectedDate.getTimeInMillis() + DateUtils.DAY_IN_MILLIS);
+
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), "No calendar app found", Toast.LENGTH_SHORT).show();
+        }
     }
 }
