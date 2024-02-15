@@ -57,7 +57,10 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         btnBackup=view.findViewById(R.id.btnBackup);
         btnLogout=view.findViewById(R.id.btnLogout);
-        btnBackup.setOnClickListener(v -> profilePresenter.backupMealsToFirebase());
+        btnBackup.setOnClickListener(v -> {
+            profilePresenter.backupMealsToFirebase();
+            profilePresenter.backupScheduleMeals();
+        });
         btnLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
     }
 
@@ -83,12 +86,6 @@ public class ProfileFragment extends Fragment {
     private void logout() {
         SharedPreferences preferences = getActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE);
         preferences.edit().clear().apply();
-
-
-//        Context context = getContext();
-//        if (context != null) {
-//            DataBase.getInstance(context).clearAllTables();
-//        }
         profilePresenter.clearDB();
 
         getActivity().finishAffinity();

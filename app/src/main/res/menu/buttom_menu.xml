@@ -18,17 +18,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="@string/Favorite"
-        android:icon="@drawable/saved2"/>
+        android:icon="@drawable/ic_round_favorite_24"/>
+
+    <item
+        android:id="@+id/planFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/Plan"
+        android:icon="@drawable/calendar_nav"/>
+
+
     <item
         android:id="@+id/profileFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="@string/Profile"
         android:icon="@drawable/profile"/>
-    <item
-        android:id="@+id/planFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/Plan"
-        android:icon="@drawable/profile"/>
+
 </menu>

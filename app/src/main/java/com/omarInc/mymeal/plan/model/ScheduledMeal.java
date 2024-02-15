@@ -1,8 +1,17 @@
-package com.omarInc.mymeal.model;
+package com.omarInc.mymeal.plan.model;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Meal {
+import java.util.Date;
+
+@Entity(tableName = "scheduled_meals")
+public class ScheduledMeal {
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+
     @SerializedName("strMeal")
     private String strMeal;
 
@@ -11,24 +20,15 @@ public class Meal {
 
     @SerializedName("idMeal")
     private String idMeal;
-    @SerializedName("dateScheduled")
-    private long dateScheduled;
+    public long dateScheduled;
 
-    public long getDateScheduled() {
-        return dateScheduled;
+    public int getId() {
+        return id;
     }
 
-    public void setDateScheduled(long dateScheduled) {
-        this.dateScheduled = dateScheduled;
+    public void setId(int id) {
+        this.id = id;
     }
-
-    public Meal(String strMeal, String strMealThumb, String idMeal) {
-        this.strMeal = strMeal;
-        this.strMealThumb = strMealThumb;
-        this.idMeal = idMeal;
-    }
-
-
 
     public String getStrMeal() {
         return strMeal;
@@ -52,5 +52,13 @@ public class Meal {
 
     public void setIdMeal(String idMeal) {
         this.idMeal = idMeal;
+    }
+
+    public long getDateScheduled() {
+        return dateScheduled;
+    }
+
+    public void setDateScheduled(long dateScheduled) {
+        this.dateScheduled = dateScheduled;
     }
 }

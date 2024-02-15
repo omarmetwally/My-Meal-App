@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:lines="2"
-            android:text="TextView" />
+            android:text="@string/Categories" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

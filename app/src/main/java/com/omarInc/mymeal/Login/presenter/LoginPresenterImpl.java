@@ -9,6 +9,7 @@ import com.omarInc.mymeal.Login.view.LoginView;
 import com.omarInc.mymeal.db.MealRepository;
 import com.omarInc.mymeal.firebase.IFirebaseAuth;
 import com.omarInc.mymeal.model.MealDetail;
+import com.omarInc.mymeal.plan.model.ScheduledMeal;
 import com.omarInc.mymeal.sharedpreferences.SharedPreferencesDataSourceImpl;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                 view.hideLoading();
                 view.onLoginSuccess(UserID);
                 fetchAndStoreUserMeals(UserID);
+                fetchAndStoreUserScheduledMeals(UserID);
             }
 
             @Override
@@ -62,6 +64,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             public void onSuccess(String userId) {
                 view.onGoogleLoginSuccess(userId);
                 fetchAndStoreUserMeals(userId);
+                fetchAndStoreUserScheduledMeals(userId);
             }
 
             @Override
@@ -97,5 +100,30 @@ public class LoginPresenterImpl implements LoginPresenter {
                 }
             }
         });
+
+
+
+
     }
+
+    @Override
+    public void fetchAndStoreUserScheduledMeals(String userId) {
+        authManager.fetchSchedule(userId, new IFirebaseAuth.DataFetchCallback<List<ScheduledMeal>>() {
+            @Override
+            public void onSuccess(List<ScheduledMeal> data) {
+
+                new Thread(() -> {
+                    mealRepository.insertAllScheduledMeals(data); // Assuming insertAll is a method in MealRepository for inserting a list of MealDetail
+                    // Notify the UI thread about the success
+
+                }).start();
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
+    }
+
 }

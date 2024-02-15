@@ -9,6 +9,8 @@ import com.omarInc.mymeal.model.MealDetailResponse;
 import com.omarInc.mymeal.network.MealRemoteDataSource;
 import com.omarInc.mymeal.network.NetworkCallBack;
 
+import java.util.Calendar;
+
 public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     private MealDetailView view;
     private MealRemoteDataSource dataSource;
@@ -64,4 +66,10 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
             view.setFavoriteStatus(isFavorite);
         });
     }
+
+    @Override
+    public void scheduleMealForDate(MealDetail mealDetail, Calendar selectedDate) {
+        repository.scheduleMeal(mealDetail, selectedDate.getTime());
+    }
+
 }

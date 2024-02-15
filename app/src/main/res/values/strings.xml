@@ -17,7 +17,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Home">Home</string>
-    <string name="Search">Search</string>
+    <string name="Search">Search...</string>
     <string name="Profile">Profile</string>
     <string name="Favorite">Favorite</string>
     <string name="Plan">Plan</string>
@@ -33,8 +33,17 @@
     <string name="IngredientSearch">Ingredients</string>
     <string name="See_more">See more...</string>
     <string name="All_Ingradients">All Ingradients"</string>
-
-
+    <string name="Video_Not_Available">YouTube video link is not available"</string>
+    <string name="Categories">Categories</string>
+    <string name="Ingrediens">Ingrediens</string>
+    <string name="Countries">Countries</string>
+    <string name="HaveAccount">Already \nhave an \nAccount?\n</string>
+    <string name="ForgetPassword">Forgot Password?</string>
+    <string name="Login">Login</string>
+    <string name="RegisterNow">New user? Register Now</string>
+    <string name="anotherMethod">Use other Methods</string>
+    <string name="firstTime">Here\'s\nyour first\nstep with\nus!</string>
+    <string name="Register">Register</string>
 
 
 </resources>

@@ -251,7 +251,7 @@
             android:layout_height="wrap_content"
 
             android:layout_marginBottom="8dp"
-            android:text="Categories"
+            android:text="@string/Categories"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -270,7 +270,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
-                android:text="Ingrediens"
+                android:text="@string/Ingrediens"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -302,7 +302,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Countries"
+            android:text="@string/Countries"
             android:textSize="18sp"
             android:textStyle="bold" />
 

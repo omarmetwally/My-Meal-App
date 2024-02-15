@@ -7,5 +7,6 @@ public interface LoginPresenter {
     void performGoogleLogin_firebaseAuthWithGoogle(String idToken);
 
     void fetchAndStoreUserMeals(String userId);
+    void fetchAndStoreUserScheduledMeals(String userId);
 
 }

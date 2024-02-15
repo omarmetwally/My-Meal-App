@@ -21,7 +21,7 @@ public interface MealDao {
     @Delete
     void delete(MealDetail mealDetail);
 
-    // If you want to delete by ID:
+
     @Query("DELETE FROM meal_table WHERE idMeal = :idMeal")
     void deleteById(String idMeal);
 

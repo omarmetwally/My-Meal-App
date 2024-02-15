@@ -16,6 +16,8 @@
         android:layout_margin="8dp"
         android:theme="@style/Widget.AppCompat.SearchView.ActionBar"
         app:iconifiedByDefault="false"
+
+        app:queryHint="@string/Search"
         app:queryBackground="@android:color/transparent"
         app:searchIcon="@drawable/search"
         android:background="@drawable/search_style"

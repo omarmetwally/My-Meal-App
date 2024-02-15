@@ -86,7 +86,7 @@ public class SplashFragment extends Fragment implements SplashView {
         Intent i = new Intent(getActivity(), MainActivity2.class);
         startActivity(i);
        getActivity().finish();
-        Toast.makeText(getActivity(), "token :"+authToken, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

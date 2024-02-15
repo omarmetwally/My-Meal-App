@@ -1,5 +1,6 @@
 package com.omarInc.mymeal.mealdetails.view;
 
+import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.omarInc.mymeal.R;
 import com.omarInc.mymeal.db.MealRepository;
 import com.omarInc.mymeal.db.MealRepositoryImpl;
@@ -33,17 +37,20 @@ import com.omarInc.mymeal.mealdetails.presenter.MealDetailsPresenter;
 import com.omarInc.mymeal.mealdetails.presenter.MealDetailsPresenterImpl;
 import com.omarInc.mymeal.model.MealDetail;
 import com.omarInc.mymeal.network.MealRemoteDataSourceImpl;
+import com.omarInc.mymeal.plan.model.ScheduledMeal;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class MealDetailsFragment extends Fragment implements MealDetailView {
 
+    private static final String TAG = "MealDetailsFragment";
     ProgressBar progressBar;
-    private ImageView foodCoverImg,btnBackImage,recipeYouTube,detailFav,scroll_Image;
+    private ImageView foodCoverImg,btnBackImage,recipeYouTube,detailFav,scroll_Image,btnCalendar;
     private YouTubePlayerView youTubePlayerView ;
     private TextView foodCategoryTxt, foodAreaTxt, foodTitleTxt, foodDescTxt;
     private RecyclerView ingredientsRecyclerView;
@@ -95,6 +102,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
         detailFav=view.findViewById(R.id.detailFav);
         scroll_Image=view.findViewById(R.id.scroll_Image);
         scrollView=view.findViewById(R.id.scrollView);
+        btnCalendar=view.findViewById(R.id.btnCalendar);
+
 
         scroll_Image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,24 +163,36 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
         foodTitleTxt.setText(mealDetail.getStrMeal());
         foodDescTxt.setText(mealDetail.getStrInstructions());
 
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        getContext(),
+                        (views, year, month, dayOfMonth) -> {
+                            Calendar selectedDate = Calendar.getInstance();
+                            selectedDate.set(year, month, dayOfMonth);
+                            // Schedule the meal with selectedDate
+
+                            presenter.scheduleMealForDate(mealDetail, selectedDate);
+                        },
+                        now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            }
+        });
         btnBackImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigateUp();
             }
         });
-        detailFav.setOnClickListener(v -> {
-            // Assuming 'mealDetail' is the instance of MealDetail you want to save.
-//            MealRepositoryImpl.getInstance(getContext()).insert(mealDetail);
-            presenter.onFavoriteClicked(mealDetail);
-//            detailFav.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red), android.graphics.PorterDuff.Mode.MULTIPLY);
-        });
+        detailFav.setOnClickListener(v -> {presenter.onFavoriteClicked(mealDetail);});
 
 
         ingredientsMeasuesAdapter.setIngredientsAndMeasures(mealDetail.getNonEmptyIngredientsAndMeasures());
 
         if(mealDetail != null ) {
-            ingredientsRecyclerView.scheduleLayoutAnimation(); // Trigger animation after setting data
+            ingredientsRecyclerView.scheduleLayoutAnimation();
         }
         recipeYouTube.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,7 +206,10 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
 
-                youTubePlayer.cueVideo(extractYouTubeVideoId(mealDetail.getStrYoutube()), 0);
+                if (mealDetail.getStrYoutube() != null && !mealDetail.getStrYoutube().isEmpty())
+                    youTubePlayer.cueVideo(extractYouTubeVideoId(mealDetail.getStrYoutube()), 0);
+                else
+                    youTubePlayerView.setVisibility(View.GONE);
             }
         });
     }
@@ -212,7 +236,9 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
     }
 
     private void openYouTubeVideo(String url) {
+
         if (url != null && !url.isEmpty()) {
+            Log.i(TAG, "openYouTubeVideo: "+url);
             String videoId = extractYouTubeVideoId(url);
 
             Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId));
@@ -224,8 +250,11 @@ public class MealDetailsFragment extends Fragment implements MealDetailView {
                 startActivity(webIntent);
             }
         } else {
-            Toast.makeText(getContext(), "YouTube video link is not available", Toast.LENGTH_SHORT).show();
+           Snackbar.make(getView(),R.string.Video_Not_Available , BaseTransientBottomBar.LENGTH_LONG).show();
+
         }
+
+
     }
 
     private String extractYouTubeVideoId(String url) {

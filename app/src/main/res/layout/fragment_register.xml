@@ -35,8 +35,8 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:text="Here’s\nyour first\nstep with \nus! "
-                    android:textColor="@color/whiteTextColor" ></TextView>
+                    android:text="@string/firstTime"
+                    android:textColor="@color/whiteTextColor"></TextView>
 
                 <!--                <ImageView-->
                 <!--                    android:layout_width="wrap_content"-->
@@ -139,11 +139,11 @@
                         style="@style/loginButton"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/loginViewsMargin"
-                        android:text="Register"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/Register"
                         app:initialCornerAngle="27dp"
                         app:spinning_bar_color="#FFF"
                         app:spinning_bar_padding="6dp"
-                        android:layout_marginBottom="12dp"
                         app:spinning_bar_width="4dp" />
 
                 </LinearLayout>

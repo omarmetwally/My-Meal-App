@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.reflect.TypeToken;
 import com.omarInc.mymeal.model.MealDetail;
+import com.omarInc.mymeal.plan.model.ScheduledMeal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,5 +100,35 @@ public class FirebaseAuthDataSourceImpl implements IFirebaseAuth {
                 callback.onFailure(databaseError.getMessage());
             }
         });
+
+    }
+
+    @Override
+   public void fetchSchedule(String userId, DataFetchCallback<List<ScheduledMeal>> callback)
+    {
+        DatabaseReference mealsRef = database.getReference("users").child(userId).child("schedule_meals");
+
+        mealsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<ScheduledMeal> meals = new ArrayList<>();
+                for (DataSnapshot mealSnapshot: dataSnapshot.getChildren()) {
+                    ScheduledMeal meal = mealSnapshot.getValue(ScheduledMeal.class);
+                    meals.add(meal);
+                }
+                if (!meals.isEmpty()) {
+                    callback.onSuccess(meals);
+                } else {
+                    callback.onFailure("No meals found");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+
+
     }
 }
