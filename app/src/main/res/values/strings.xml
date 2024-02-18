@@ -83,5 +83,7 @@
     <string name="Undo">Undo</string>
     <string name="Recommended_meals">Inspiration meals</string>
 
+    <string name="invalidPassword">Password should be at least 8 characters with at least 1 Upper case and 1 special character </string>
+
 
 </resources>

@@ -13,9 +13,14 @@ import com.omarInc.mymeal.model.MealDetail;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class FavoritePresenterImpl implements  FavoritePresenter{
     private FavoriteView view;
     private MealRepository mealRepository;
+    private CompositeDisposable disposables = new CompositeDisposable();
 
     public FavoritePresenterImpl(Context context) {
         this.mealRepository = MealRepositoryImpl.getInstance(context);
@@ -23,12 +28,24 @@ public class FavoritePresenterImpl implements  FavoritePresenter{
     @Override
     public void loadMeals() {
 
-        mealRepository.getAllMeals().observe(view.getLifecycleOwner(), mealDetails -> {
-            List<Meal> simplifiedMeals = mealDetails.stream()
-                    .map(mealDetail -> new Meal(mealDetail.getStrMeal(), mealDetail.getStrMealThumb(), mealDetail.getIdMeal()))
-                    .collect(Collectors.toList());
-            view.displayMeals(simplifiedMeals);
-        });
+//        mealRepository.getAllMeals().observe(view.getLifecycleOwner(), mealDetails -> {
+//            List<Meal> simplifiedMeals = mealDetails.stream()
+//                    .map(mealDetail -> new Meal(mealDetail.getStrMeal(), mealDetail.getStrMealThumb(), mealDetail.getIdMeal()))
+//                    .collect(Collectors.toList());
+//            view.displayMeals(simplifiedMeals);
+//        });
+        disposables.add(mealRepository.getAllMeals()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mealDetails -> {
+                            List<Meal> simplifiedMeals = mealDetails.stream()
+                                    .map(mealDetail -> new Meal(mealDetail.getStrMeal(), mealDetail.getStrMealThumb(), mealDetail.getIdMeal()))
+                                    .collect(Collectors.toList());
+                            view.displayMeals(simplifiedMeals);
+                        },
+                        throwable -> {}
+                ));
     }
 
     @Override
@@ -44,8 +61,15 @@ public class FavoritePresenterImpl implements  FavoritePresenter{
 
     @Override
     public void removeMeal(String mealId) {
-        mealRepository.deleteById(mealId);
-        loadMeals();
+//        mealRepository.deleteById(mealId);
+//        loadMeals();
+        disposables.add(mealRepository.deleteById(mealId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> loadMeals(),
+                        throwable -> {}
+                ));
     }
 
 

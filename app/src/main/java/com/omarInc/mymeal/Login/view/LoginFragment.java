@@ -160,18 +160,18 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     @Override
     public boolean validateInput(String email, String password) {
         if (email.isEmpty()) {
-            emailEditText.setError(String.valueOf(R.string.emailEmpty));
-            showMessage(String.valueOf(R.string.emailEmpty));
+            emailEditText.setError(getString(R.string.emailEmpty));
+            showMessage(getString(R.string.emailEmpty));
             return false;
         }
         if (password.isEmpty()) {
-            passwordEditText.setError(String.valueOf(R.string.passwordEmpty));
-            showMessage(String.valueOf(R.string.passwordEmpty));
+            passwordEditText.setError(getString(R.string.passwordEmpty));
+            showMessage(getString(R.string.passwordEmpty));
             return false;
         }
         if (!isValidEmail(email)) {
-            emailEditText.setError(String.valueOf(R.string.invalidEmail));
-            showMessage(String.valueOf(R.string.invalidEmail));
+            emailEditText.setError(getString(R.string.invalidEmail));
+            showMessage(getString(R.string.invalidEmail));
             return false;
         }
         return true;

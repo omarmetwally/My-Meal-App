@@ -83,6 +83,7 @@
                     android:id="@+id/emailLoginEditTetx"
                     android:layout_width="match_parent"
 
+                    android:inputType="textEmailAddress|textAutoComplete"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>

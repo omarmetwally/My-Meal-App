@@ -14,6 +14,10 @@ import com.omarInc.mymeal.sharedpreferences.SharedPreferencesDataSourceImpl;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 
 public class LoginPresenterImpl implements LoginPresenter {
     private static final String TAG = "LoginPresenterImpl";
@@ -21,6 +25,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     private IFirebaseAuth authManager;
     private Context context;
     private MealRepository mealRepository;
+    private CompositeDisposable disposables = new CompositeDisposable();
 
     public LoginPresenterImpl(LoginView view, IFirebaseAuth authManager, Context context, MealRepository mealRepository) {
         this.view = view;
@@ -86,12 +91,22 @@ public class LoginPresenterImpl implements LoginPresenter {
         authManager.fetchMeals(userId, new IFirebaseAuth.DataFetchCallback<List<MealDetail>>() {
             @Override
             public void onSuccess(List<MealDetail> meals) {
-                new Thread(() -> {
-                    mealRepository.insertAll(meals);
-                    if (view != null) {
-                       view.onMealsFetchedAndStoredSuccessfully();
-                    }
-                }).start();
+                disposables.add(mealRepository.insertAll(meals)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> {
+                                    if (view != null) {
+                                        view.onMealsFetchedAndStoredSuccessfully();
+                                    }
+                                },
+                                throwable -> {
+                                    Log.e(TAG, "Error inserting meals: ", throwable);
+                                    if (view != null) {
+                                        view.onLoginError(throwable.getMessage());
+                                    }
+                                }
+                        ));
             }
 
             @Override

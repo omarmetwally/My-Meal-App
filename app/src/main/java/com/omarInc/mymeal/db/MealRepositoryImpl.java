@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 
 public class MealRepositoryImpl implements MealRepository {
     private MealDao mealDao;
@@ -43,24 +48,27 @@ public class MealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void insert(MealDetail mealDetail) {
-        new Thread(() -> mealDao.insert(mealDetail)).start();
+    public Completable insert(MealDetail mealDetail) {
+        return mealDao.insert(mealDetail)
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
-    public LiveData<MealDetail> getMealById(String idMeal) {
-        return mealDao.getMealById(idMeal);
+    public Flowable<MealDetail> getMealById(String idMeal) {
+        return mealDao.getMealById(idMeal)
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
-    public void delete(MealDetail mealDetail) {
-        new Thread(() -> mealDao.delete(mealDetail)).start();
+    public Completable delete(MealDetail mealDetail) {
+        return mealDao.delete(mealDetail)
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
-    public void deleteById(String idMeal) {
-        new Thread(() -> mealDao.deleteById(idMeal)).start();
-    }
+    public Completable deleteById(String idMeal) {
+        return mealDao.deleteById(idMeal)
+                .subscribeOn(Schedulers.io());    }
     @Override
     public void deleteScheduledMeal(String mealId, long scheduledDate) {
         new Thread(() -> scheduledMealDao.deleteByIdAndDate(mealId, scheduledDate)).start();
@@ -77,28 +85,32 @@ public class MealRepositoryImpl implements MealRepository {
         });
     }
     @Override
-    public void toggleFavorite(MealDetail mealDetail) {
-        new Thread(() -> {
-            int count = mealDao.hasMealSync(mealDetail.getIdMeal());
-            if (count > 0) {
-                mealDao.deleteById(mealDetail.getIdMeal());
-            } else {
-                mealDao.insert(mealDetail);
-            }
-        }).start();
+    public Completable toggleFavorite(MealDetail mealDetail) {
+        return isFavorite(mealDetail.getIdMeal())
+                .flatMapCompletable(isFavorite -> {
+                    if (isFavorite) {
+                        return mealDao.deleteById(mealDetail.getIdMeal());
+                    } else {
+                        return mealDao.insert(mealDetail);
+                    }
+                })
+                .subscribeOn(Schedulers.io());
     }
 
 
     @Override
-    public LiveData<Boolean> isFavorite(String mealId) {
+    public Single<Boolean> isFavorite(String mealId) {
 
-        return Transformations.map(mealDao.hasMeal(mealId), count -> count > 0);
+        return mealDao.hasMeal(mealId)
+                .map(count -> count > 0)
+                .subscribeOn(Schedulers.io());
 
     }
 
     @Override
-    public LiveData<List<MealDetail>> getAllMeals() {
-        return mealDao.getAllMeals();
+    public Flowable<List<MealDetail>>getAllMeals() {
+        return mealDao.getAllMeals()
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
@@ -107,7 +119,7 @@ public class MealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void clearAll() {
+    public void  clearAll() {
         new Thread(() ->  {
             mealDao.clearAll();
             scheduledMealDao.clearAll();
@@ -116,8 +128,9 @@ public class MealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void insertAll(List<MealDetail> meals) {
-        executor.execute(() -> mealDao.insertAll(meals));
+    public Completable insertAll(List<MealDetail> meals) {
+        return mealDao.insertAll(meals)
+                .subscribeOn(Schedulers.io());
     }
 
     @Override

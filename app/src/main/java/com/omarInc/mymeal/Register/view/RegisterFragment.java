@@ -119,23 +119,27 @@ public class RegisterFragment extends Fragment implements OnRegisterClick, Regis
     @Override
     public boolean validateInput(String name, String email, String password, String confirmPassword) {
         if (email.isEmpty()) {
-            emailEditText.setError(String.valueOf(R.string.emailEmpty));
+            emailEditText.setError(getString(R.string.emailEmpty));
            // showMessage("Email cannot be empty");
             return false;
         }
         if (password.isEmpty()) {
-            passwordEditText.setError(String.valueOf(R.string.passwordEmpty));
+            passwordEditText.setError(getString(R.string.passwordEmpty));
            // showMessage("Password cannot be empty");
             return false;
         }
         if (!isValidEmail(email)) {
-            emailEditText.setError(String.valueOf(R.string.invalidEmail));
+            emailEditText.setError(getString(R.string.invalidEmail));
           //  showMessage("Invalid email format");
             return false;
         }
         if(!password.equals(confirmPassword))
         {
-         confirmPasswordEditText.setError(String.valueOf(R.string.passwordMatch));
+         confirmPasswordEditText.setError(getString(R.string.passwordMatch));
+        }
+        if (!isValidPassword(password)) {
+            passwordEditText.setError(getString(R.string.invalidPassword));
+            return false;
         }
         return true;
     }
@@ -144,6 +148,10 @@ public class RegisterFragment extends Fragment implements OnRegisterClick, Regis
     public boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         return email.matches(emailRegex);
+    }
+    private boolean isValidPassword(String password) {
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,}$";
+        return password.matches(passwordRegex);
     }
 
     @Override

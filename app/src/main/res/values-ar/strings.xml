@@ -66,4 +66,6 @@
     <string name="MealRemoved">تم إزالة الوجبة</string>
     <string name="Undo">تراجع</string>
     <string name="Recommended_meals">الإقتراحات</string>
+    <string name="invalidPassword">يجب أن تكون كلمة المرور على الأقل 8 أحرف وتحتوي على حرف كبير واحد ورمز خاص واحد على الأقل</string>
+
 </resources>

@@ -17,9 +17,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class PlanPresenterImpl implements PlanPresenter {
     private PlanView view;
     private MealRepository repository;
+    private CompositeDisposable disposables = new CompositeDisposable();
 
 
     public PlanPresenterImpl(Context context) {
@@ -71,12 +76,24 @@ public class PlanPresenterImpl implements PlanPresenter {
 
     @Override
     public void loadMeals() {
-        repository.getAllMeals().observe(view.getLifecycleOwner(), mealDetails -> {
-            List<Meal> simplifiedMeals = mealDetails.stream()
-                    .map(mealDetail -> new Meal(mealDetail.getStrMeal(), mealDetail.getStrMealThumb(), mealDetail.getIdMeal()))
-                    .collect(Collectors.toList());
-            view.displayMealsForDate(simplifiedMeals);
-        });
+//        repository.getAllMeals().observe(view.getLifecycleOwner(), mealDetails -> {
+//            List<Meal> simplifiedMeals = mealDetails.stream()
+//                    .map(mealDetail -> new Meal(mealDetail.getStrMeal(), mealDetail.getStrMealThumb(), mealDetail.getIdMeal()))
+//                    .collect(Collectors.toList());
+//            view.displayMealsForDate(simplifiedMeals);
+//        });
+        disposables.add(repository.getAllMeals()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        meals -> {
+                            List<Meal> simplifiedMeals = meals.stream()
+                                    .map(mealDetail -> new Meal(mealDetail.getStrMeal(), mealDetail.getStrMealThumb(), mealDetail.getIdMeal()))
+                                    .collect(Collectors.toList());
+                            view.displayMealsForDate(simplifiedMeals);
+                        },
+                        throwable -> view.displayError(throwable.getMessage())
+                ));
     }
 
     public LiveData<List<Date>> fetchAllScheduledDates() {

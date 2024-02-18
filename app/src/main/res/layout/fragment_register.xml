@@ -98,7 +98,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/emailRegisterEditText"
                             android:layout_width="match_parent"
-
+                            android:inputType="textEmailAddress|textAutoComplete"
                             android:layout_height="wrap_content" />
 
                     </com.google.android.material.textfield.TextInputLayout>

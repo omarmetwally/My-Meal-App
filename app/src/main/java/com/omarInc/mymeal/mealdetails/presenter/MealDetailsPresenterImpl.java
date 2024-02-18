@@ -11,10 +11,15 @@ import com.omarInc.mymeal.network.NetworkCallBack;
 
 import java.util.Calendar;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     private MealDetailView view;
     private MealRemoteDataSource dataSource;
     private MealRepository repository;
+    private CompositeDisposable disposables = new CompositeDisposable();
 
     public MealDetailsPresenterImpl(MealDetailView view, MealRemoteDataSource dataSource,MealRepository repository) {
         this.view = view;
@@ -26,14 +31,19 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     public void fetchMealDetails(String mealId,Boolean isOffline) {
         if(isOffline)
         {
-            repository.getMealById(mealId).observe(view.getLifecycleOwner(), mealDetail -> {
-                if (mealDetail != null) {
-                    view.showMealDetails(mealDetail);
-                } else {
-                    view.showError("Meal details not found in the database.");
-                }
-            });
-
+            disposables.add(repository.getMealById(mealId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            mealDetail -> {
+                                if (mealDetail != null) {
+                                    view.showMealDetails(mealDetail);
+                                } else {
+                                    view.showError("Meal details not found in the database.");
+                                }
+                            },
+                            throwable -> view.showError(throwable.getMessage())
+                    ));
 
 
 
@@ -57,14 +67,36 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     @Override
     public void onFavoriteClicked(MealDetail mealDetail) {
 
-        repository.toggleFavorite(mealDetail);
+//        repository.toggleFavorite(mealDetail);
+
+        disposables.add(repository.toggleFavorite(mealDetail)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            checkIfFavorite(mealDetail.getIdMeal());
+                        },
+                        throwable -> {
+                             view.showError(throwable.getMessage());
+                        }
+                )
+        );
+
     }
+
 
     @Override
     public void checkIfFavorite(String mealId) {
-        repository.isFavorite(mealId).observe(view.getLifecycleOwner(), isFavorite -> {
-            view.setFavoriteStatus(isFavorite);
-        });
+//        repository.isFavorite(mealId).observe(view.getLifecycleOwner(), isFavorite -> {
+//            view.setFavoriteStatus(isFavorite);
+//        });
+        disposables.add(repository.isFavorite(mealId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        isFavorite -> view.setFavoriteStatus(isFavorite),
+                        throwable -> view.showError(throwable.getMessage())
+                ));
     }
 
     @Override

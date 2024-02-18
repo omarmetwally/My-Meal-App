@@ -68,4 +68,6 @@
     <string name="MealRemoved">الوجبة اتشالت</string>
     <string name="Undo">رجعها</string>
     <string name="Recommended_meals">ترشيحاتنا</string>
+    <string name="invalidPassword">الباسورد لازم يكون ٨ حروف على الأقل ويكون فيه حرف كبير ورمز واحد على الأقل</string>
+
 </resources>
