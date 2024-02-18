@@ -10,6 +10,4 @@ public interface MealDetailView {
 
     void setFavoriteStatus(boolean isFavorite);
     LifecycleOwner getLifecycleOwner();
-
-    // Add other methods for updating the UI as needed
 }

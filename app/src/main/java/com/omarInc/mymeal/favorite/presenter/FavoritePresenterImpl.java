@@ -22,16 +22,6 @@ public class FavoritePresenterImpl implements  FavoritePresenter{
     }
     @Override
     public void loadMeals() {
-//        new Thread(() -> {
-//            LiveData<List<MealDetail>> meals = mealRepository.getAllMeals(); // Assume this method exists and fetches data synchronously
-//            if (view != null) {
-//                if (meals != null) {
-//                    view.displayMeals(meals);
-//                } else {
-//                    view.displayError("Error fetching meals from database.");
-//                }
-//            }
-//        }).start();
 
         mealRepository.getAllMeals().observe(view.getLifecycleOwner(), mealDetails -> {
             List<Meal> simplifiedMeals = mealDetails.stream()
@@ -55,7 +45,7 @@ public class FavoritePresenterImpl implements  FavoritePresenter{
     @Override
     public void removeMeal(String mealId) {
         mealRepository.deleteById(mealId);
-        loadMeals(); // Reload the meals to reflect the change
+        loadMeals();
     }
 
 

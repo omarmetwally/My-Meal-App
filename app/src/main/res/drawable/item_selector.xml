@@ -4,9 +4,9 @@
 
     <item
         android:state_selected="true"
-        android:color="@color/button_hover"/>
+        android:color="@color/backgrounds"/>
     <item
         android:state_selected="false"
-        android:color="@color/black_overlay"/>
+        android:color="@color/black"/>
 
 </selector>

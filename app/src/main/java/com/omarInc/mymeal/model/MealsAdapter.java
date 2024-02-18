@@ -56,8 +56,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         if (meals == null || meals.isEmpty()) {
-            // Handle the case where meals are not available
-            return; // Exit the method to prevent further execution and avoid the divide by zero error
+            return;
         }
 
 
@@ -118,7 +117,6 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
         }
     }
 
-    // Insert an item into the adapter's dataset
     public void insertAt(int position, Meal meal) {
         meals.add(position, meal);
         notifyItemInserted(position);
@@ -136,16 +134,12 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
         TextView txtCategoryName;
         ShimmerFrameLayout shimmerViewContainer;
         KenBurnsView kenBurnsView;
-        // Duration for the transition in milliseconds
-        long duration = 2000; // 10 seconds
+        long duration = 2000;
 
-        // Using an AccelerateDecelerateInterpolator for smooth acceleration and deceleration
         Interpolator interpolator = new AccelerateDecelerateInterpolator();
 
-        // Creating the generator with specified duration and interpolator
         RandomTransitionGenerator generator = new RandomTransitionGenerator(duration, interpolator);
 
-// Applying the generator to the KenBurnsView
 
 
 

@@ -6,6 +6,8 @@ import com.omarInc.mymeal.model.IngredientsResponse;
 import com.omarInc.mymeal.model.MealDetailResponse;
 import com.omarInc.mymeal.model.MealsResponse;
 
+import io.reactivex.rxjava3.core.Observable;
+
 public interface MealRemoteDataSource {
 
     void getCategories(NetworkCallBack<CategoryResponse> networkCallBack);
@@ -22,8 +24,7 @@ public interface MealRemoteDataSource {
 
     void getMealsByIngredient(String ingredient, NetworkCallBack<MealsResponse> networkCallBack);
 
-    void searchMealsByName(String mealName, NetworkCallBack<MealsResponse> networkCallBack);
-
+    Observable<MealsResponse> searchMealsByName(String query);
     void getIngredients(NetworkCallBack<IngredientsResponse> networkCallBack);
     void getAreas(NetworkCallBack<AreasResponse> networkCallBack);
 

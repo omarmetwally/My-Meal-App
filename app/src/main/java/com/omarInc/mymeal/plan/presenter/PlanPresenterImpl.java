@@ -40,39 +40,6 @@ public class PlanPresenterImpl implements PlanPresenter {
 
     @Override
     public void fetchMealsForDate(Date date) {
-//        Calendar calendarStart = Calendar.getInstance();
-//        calendarStart.setTime(date);
-//        calendarStart.set(Calendar.HOUR_OF_DAY, 0);
-//        calendarStart.set(Calendar.MINUTE, 0);
-//        calendarStart.set(Calendar.SECOND, 0);
-//        calendarStart.set(Calendar.MILLISECOND, 0);
-//        long dayStart = calendarStart.getTimeInMillis();
-//
-//        Calendar calendarEnd = (Calendar) calendarStart.clone();
-//        calendarEnd.set(Calendar.HOUR_OF_DAY, 23);
-//        calendarEnd.set(Calendar.MINUTE, 59);
-//        calendarEnd.set(Calendar.SECOND, 59);
-//        calendarEnd.set(Calendar.MILLISECOND, 999);
-//        long dayEnd = calendarEnd.getTimeInMillis();
-//
-//        repository.getMealsForDay(dayStart, dayEnd).observe(view.getLifecycleOwner(), new Observer<List<Meal>>() {
-//            @Override
-//            public void onChanged(List<Meal> mealDetails) {
-//                // Update your UI here with the fetched meals
-//                // For example, updating a RecyclerView adapter
-//                if (mealDetails != null && !mealDetails.isEmpty()) {
-//                    // Update adapter
-//                   view.displayMealsForDate(mealDetails);
-//                  //  mealsAdapter.setMeals(mealDetails);
-//
-//                } else {
-//                    // Handle the case where no meals are found for the selected day
-//                    // You might want to clear the adapter or show a message
-//                   view.displayMealsForDate(new ArrayList<>());
-//
-//                }
-//            }
-//        });
 
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.setTime(date);

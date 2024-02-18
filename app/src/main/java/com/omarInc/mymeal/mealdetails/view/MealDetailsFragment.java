@@ -169,7 +169,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailView , Us
 
         MealRepository repository = MealRepositoryImpl.getInstance(getContext());
 
-        presenter = new MealDetailsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance(),repository);
+        presenter = new MealDetailsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance(getActivity()),repository);
 
         if (savedInstanceState != null) {
             mealID = savedInstanceState.getString("mealID");

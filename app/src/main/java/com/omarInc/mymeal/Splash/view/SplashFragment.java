@@ -54,20 +54,7 @@ public class SplashFragment extends Fragment implements SplashView {
 
             @Override
             public void run() {
-                NavController navController = Navigation.findNavController(view);
 
-//
-//                if (SharedPreferencesDataSourceImpl.getInstance(requireContext()).getAuthToken() != null) {
-//
-//                    SplashFragmentDirections.ActionSplashFragmentToHomeFragment action=
-//                            SplashFragmentDirections.
-//                                    actionSplashFragmentToHomeFragment("");
-//                    action.setAuthID(SharedPreferencesDataSourceImpl.getInstance(requireContext()).getAuthToken());
-//                    navController.navigate(action);
-//                } else {
-//                    // If not, navigate to LoginFragment
-//                    navController.navigate(R.id.action_splashFragment_to_loginFragment);
-//                }
                 presenter.decideNextPage();
 
             }

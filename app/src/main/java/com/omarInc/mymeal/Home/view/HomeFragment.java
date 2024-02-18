@@ -53,9 +53,9 @@ import com.stack.viewpager.OrientedViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements CategoriesView, IngredientsView , AreasView, RecommendedMealsView {
+public class HomeFragment extends Fragment implements CategoriesView, IngredientsView, AreasView, RecommendedMealsView {
 
-    private RecyclerView categoriesRecyclerView,ingredientsRecyclerView,areaRecyclerView;
+    private RecyclerView categoriesRecyclerView, ingredientsRecyclerView, areaRecyclerView;
     private RecyclerView recommendedRecyclerView;
     private CategoriesPresenter categoriesPresenter;
     private IngredientsPresenter ingredientsPresenter;
@@ -72,10 +72,9 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     ViewPager2 viewPager2;
 
 
-
-
     private OrientedViewPager mOrientedViewPager;
     private List<Fragment> mFragments = new ArrayList<>();
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -96,7 +95,6 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         Log.i(TAG, "onCreate: ");
 
 
-
     }
 
     @Override
@@ -110,7 +108,7 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
-        seeMoreTextView=view.findViewById(R.id.seeMoreTxt);
+        seeMoreTextView = view.findViewById(R.id.seeMoreTxt);
 
         categoriesInit(view);
 
@@ -128,26 +126,16 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
 
     private void recommendedInit(@NonNull View view) {
 
-      recommendedMealsPresenter = new RecommendedMealsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
+        recommendedMealsPresenter = new RecommendedMealsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance(getActivity()));
         recommendedMealsPresenter.fetchRecommendedMeals();
-//
-//        recommendedRecyclerView = view.findViewById(R.id.recommendedRecView);
-//        recommendedRecyclerView.setHasFixedSize(true);
-//        LinearLayoutManager recommendedLayoutManager = new LinearLayoutManager(getActivity());
-//        recommendedLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-//
-//        recommendedRecyclerView.setLayoutManager(recommendedLayoutManager);
-
-        //  recyclerViewCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        mealsAdapter = new MealsAdapter(getContext(), new ArrayList<>(),mealId -> {
+        mealsAdapter = new MealsAdapter(getContext(), new ArrayList<>(), mealId -> {
 
 
-            HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action=
-                    HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealId,false);
+            HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(mealId, false);
             NavHostFragment.findNavController(HomeFragment.this).navigate(action);
 
-        },R.layout.stack_meal_item);
-//        recommendedRecyclerView.setAdapter(mealsAdapter);
+        }, R.layout.stack_meal_item);
 
 
         ViewPager2 viewPager21 = view.findViewById(R.id.viewPager);
@@ -155,72 +143,28 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         viewPager21.setPageTransformer(new ViewPagerStack());
 
 
-       viewPager21.setOffscreenPageLimit(2);
+        viewPager21.setOffscreenPageLimit(2);
         viewPager21.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
         viewPager21.setAdapter(mealsAdapter);
 
-
-
-
-        //////////////////*****************
-
-//        recommendedMealsPresenter = new RecommendedMealsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
-//        mOrientedViewPager = view.findViewById(R.id.view_pager);
-//        mOrientedViewPager.setOrientation(OrientedViewPager.Orientation.HORIZONTAL);
-//        mOrientedViewPager.setOffscreenPageLimit(1);
-//        mOrientedViewPager.setPageTransformer(true, new VerticalStackTransformer(getContext()));
-//
-//        // Fetch recommended meals and then set up the ViewPager adapter
-//        recommendedMealsPresenter.fetchRecommendedMeals();
-
-
-//        viewPager2 = view.findViewById(R.id.viewPager);
-//
-//        // Initialize your adapter with an empty list or pre-fetched data
-//        mealsAdapter = new MealsAdapter(getContext(), new ArrayList<>());
-//
-//        // Set the adapter to the ViewPager2
-//
-//        viewPager2.setAdapter(mealsAdapter);
-//
-//
-//        // Fetch recommended meals
-//        recommendedMealsPresenter = new RecommendedMealsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
-//        recommendedMealsPresenter.fetchRecommendedMeals();
-
-
-
-//        viewPager2 = view.findViewById(R.id.viewPager);
-//
-//        // Initialize your adapter with an empty list or pre-fetched data
-//        mealsAdapter = new MealsAdapter(getContext(), new ArrayList<>());
-//
-//        // Set the adapter to the ViewPager2
-//        viewPager2.setAdapter(mealsAdapter);
-//
-//        // Fetch recommended meals and update adapter
-//        recommendedMealsPresenter = new RecommendedMealsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
-//        recommendedMealsPresenter.fetchRecommendedMeals();
-
     }
 
     private void areaInit(@NonNull View view) {
-        areasPresenter = new AreasPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
+        areasPresenter = new AreasPresenterImpl(this, MealRemoteDataSourceImpl.getInstance(getActivity()));
         areasPresenter.getAreas();
         areaRecyclerView = view.findViewById(R.id.areaRecView);
         areaRecyclerView.setHasFixedSize(true);
-
-        int numberOfColumns = 3; // For example, 2 columns
+        int numberOfColumns = 3;
 
         GridLayoutManager ingredientsLayoutManager = new GridLayoutManager(getActivity(), numberOfColumns);
         ingredientsLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         areaRecyclerView.setLayoutManager(ingredientsLayoutManager);
 
-        areasAdapter = new AreasAdapter(getContext(), new ArrayList<>(),areaName->{
+        areasAdapter = new AreasAdapter(getContext(), new ArrayList<>(), areaName -> {
 
-            HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action=
-                    HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(null,3,areaName);
+            HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(null, 3, areaName);
             NavHostFragment.findNavController(HomeFragment.this).navigate(action);
 
         });
@@ -228,13 +172,11 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     }
 
     private void ingredientsInit(@NonNull View view) {
-        ingredientsPresenter = new IngredientsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
+        ingredientsPresenter = new IngredientsPresenterImpl(this, MealRemoteDataSourceImpl.getInstance(getActivity()));
         ingredientsPresenter.getIngredients();
         ingredientsRecyclerView = view.findViewById(R.id.ingredientdRecView);
         ingredientsRecyclerView.setHasFixedSize(true);
-        // Specify the number of columns in the grid
-        int numberOfColumns = 2; // For example, 2 columns
-
+        int numberOfColumns = 2;
         GridLayoutManager ingredientsLayoutManager = new GridLayoutManager(getActivity(), numberOfColumns);
         ingredientsLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         ingredientsRecyclerView.setLayoutManager(ingredientsLayoutManager);
@@ -242,16 +184,16 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_scale_in);
         ingredientsRecyclerView.setLayoutAnimation(animation);
 
-        ingredientsAdapter = new IngredientsAdapter(getContext(), new ArrayList<>(),false,ingredientId->{
-            HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action=
-                    HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(null,2,ingredientId);
+        ingredientsAdapter = new IngredientsAdapter(getContext(), new ArrayList<>(), false, ingredientId -> {
+            HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(null, 2, ingredientId);
             NavHostFragment.findNavController(HomeFragment.this).navigate(action);
         });
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);
     }
 
     private void categoriesInit(@NonNull View view) {
-        categoriesPresenter = new CategoriesPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
+        categoriesPresenter = new CategoriesPresenterImpl(this, MealRemoteDataSourceImpl.getInstance(getActivity()));
         categoriesPresenter.getCategories();
 
         categoriesRecyclerView = view.findViewById(R.id.categoryRecView);
@@ -263,9 +205,9 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         categoriesRecyclerView.setLayoutAnimation(animation);
 
         //  recyclerViewCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        categoriesAdapter = new CategoriesAdapter(getContext(), new ArrayList<>(),categoryId->{
-            HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action=
-                    HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(null,1,categoryId);
+        categoriesAdapter = new CategoriesAdapter(getContext(), new ArrayList<>(), categoryId -> {
+            HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(null, 1, categoryId);
             NavHostFragment.findNavController(HomeFragment.this).navigate(action);
         });
         categoriesRecyclerView.setAdapter(categoriesAdapter);
@@ -276,8 +218,8 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     public void showCategories(List<Category> categories) {
         categoriesAdapter.setCategories(categories);
 
-        if(categories != null && !categories.isEmpty()) {
-            categoriesRecyclerView.scheduleLayoutAnimation(); // Trigger animation after setting data
+        if (categories != null && !categories.isEmpty()) {
+            categoriesRecyclerView.scheduleLayoutAnimation();
         }
 
     }
@@ -290,8 +232,8 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
         shimmerFrameLayout.stopShimmer();
         shimmerFrameLayout.setVisibility(View.GONE);
 
-        if(ingredients != null && !ingredients.isEmpty()) {
-            ingredientsRecyclerView.scheduleLayoutAnimation(); // Trigger animation after setting data
+        if (ingredients != null && !ingredients.isEmpty()) {
+            ingredientsRecyclerView.scheduleLayoutAnimation();
         }
 
 
@@ -301,9 +243,9 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
                 Gson gson = new Gson();
                 String ingredientsJson = gson.toJson(ingredients);
 
-                Log.i(TAG, "ingredientsJson: "+ingredientsJson);
-                HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action=
-                        HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(ingredientsJson,0,"");
+                Log.i(TAG, "ingredientsJson: " + ingredientsJson);
+                HomeFragmentDirections.ActionHomeFragmentToIngredientSearchFragment action =
+                        HomeFragmentDirections.actionHomeFragmentToIngredientSearchFragment(ingredientsJson, 0, "");
                 NavHostFragment.findNavController(HomeFragment.this).navigate(action);
             }
         });
@@ -318,11 +260,7 @@ public class HomeFragment extends Fragment implements CategoriesView, Ingredient
     @Override
     public void showRecommendedMeals(List<Meal> meals) {
 
-//        SectionPagerAdapter adapter = new SectionPagerAdapter(getChildFragmentManager(), meals);
-//        mOrientedViewPager.setAdapter(adapter);
-
-
-       mealsAdapter.setMeals(meals);
+        mealsAdapter.setMeals(meals);
         mealsAdapter.notifyDataSetChanged();
 
 

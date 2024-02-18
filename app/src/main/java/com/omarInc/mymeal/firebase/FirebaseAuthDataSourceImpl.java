@@ -44,11 +44,10 @@ public class FirebaseAuthDataSourceImpl implements IFirebaseAuth {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Retrieve the user ID of the signed-in user
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         if (user != null) {
-                            String userId = user.getUid(); // This is the user ID (token)
-                            callback.onSuccess(userId); // Modify your callback to include the user ID
+                            String userId = user.getUid();
+                            callback.onSuccess(userId);
                         } else {
                             callback.onFailure("Failed to retrieve user information.");
                         }

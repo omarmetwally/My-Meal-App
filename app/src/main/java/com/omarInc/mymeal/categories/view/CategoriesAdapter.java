@@ -109,16 +109,12 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         ImageView imageView;
         ShimmerFrameLayout shimmerViewContainer;
 
-
-        // Other views...
-
         public ViewHolder(View itemView) {
             super(itemView);
             txtCategoryName = itemView.findViewById(R.id.txtMealName);
             imageView=itemView.findViewById(R.id.itemImage);
             shimmerViewContainer=itemView.findViewById(R.id.shimmer_view_container);
 
-            // Initialize other views...
         }
     }
 }

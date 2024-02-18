@@ -5,9 +5,18 @@ import com.omarInc.mymeal.network.MealRemoteDataSource;
 import com.omarInc.mymeal.network.NetworkCallBack;
 import com.omarInc.mymeal.search.view.SearchingView;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class SearchPresenterImpl implements SearchPresenter {
     private SearchingView searchingView;
     private MealRemoteDataSource mealRemoteDataSource;
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public SearchPresenterImpl(SearchingView view, MealRemoteDataSource dataSource) {
         this.searchingView = view;
@@ -15,21 +24,25 @@ public class SearchPresenterImpl implements SearchPresenter {
     }
 
     @Override
-    public void performSearch(final String query) {
-        mealRemoteDataSource.searchMealsByName(query, new NetworkCallBack<MealsResponse>() {
-            @Override
-            public void onSuccessResult(MealsResponse response) {
-                if (response != null && response.getMeals() != null) {
-                    searchingView.showSearchResults(response.getMeals());
-                } else {
-                    searchingView.showError("No results found for \"" + query + "\"");
-                }
-            }
+    public void performSearch(Observable<String> searchQueryObservable) {
+        compositeDisposable.clear();
 
-            @Override
-            public void onFailureResult(String errorMsg) {
-                searchingView.showError(errorMsg);
-            }
-        });
+        Disposable disposable = searchQueryObservable
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .flatMap(query -> mealRemoteDataSource.searchMealsByName(query))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mealsResponse -> searchingView.showSearchResults(mealsResponse.getMeals()),
+                        throwable -> searchingView.showError(throwable.getMessage())
+                );
+
+        compositeDisposable.add(disposable);
+
+    }
+@Override
+    public void clearSubscriptions() {
+        compositeDisposable.clear();
     }
 }

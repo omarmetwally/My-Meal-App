@@ -79,7 +79,6 @@ public class Ingredients_MeasuesAdapter extends RecyclerView.Adapter<Ingredients
     }
 
     private String constructImageUrl(String ingredient) {
-        // Replace spaces with "%20" to ensure the URL is valid
         String formattedIngredient = ingredient.trim().replace(" ", "%20");
         return "https://www.themealdb.com/images/ingredients/" + formattedIngredient + "-Small.png";
     }

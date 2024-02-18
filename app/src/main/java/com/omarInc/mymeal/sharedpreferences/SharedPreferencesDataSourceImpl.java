@@ -11,12 +11,10 @@ public class SharedPreferencesDataSourceImpl implements ISharedPreferencesDataSo
     private static SharedPreferencesDataSourceImpl instance;
     private final SharedPreferences sharedPreferences;
 
-    // Private constructor to prevent direct instantiation
     private SharedPreferencesDataSourceImpl(Context context) {
         sharedPreferences = context.getApplicationContext().getSharedPreferences(PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
     }
 
-    //  singleton instance
     public static synchronized SharedPreferencesDataSourceImpl getInstance(Context context) {
         if (instance == null) {
             instance = new SharedPreferencesDataSourceImpl(context);

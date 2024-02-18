@@ -111,7 +111,7 @@ public class IngredientSearchFragment extends Fragment implements MealsView{
         recyclerView.setHasFixedSize(true);
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_scale_in);
         recyclerView.setLayoutAnimation(animation);
-        detailsSearchPresnter=new DetailsSearchPresnterImpl(this, MealRemoteDataSourceImpl.getInstance());
+        detailsSearchPresnter=new DetailsSearchPresnterImpl(this, MealRemoteDataSourceImpl.getInstance(getActivity()));
 
         IngradientsRecyclerViewInit(view);
 

@@ -41,7 +41,7 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
             dataSource.getMealById(mealId, new NetworkCallBack<MealDetailResponse>() {
                 @Override
                 public void onSuccessResult(MealDetailResponse mealDetailResponse) {
-                    view.showMealDetails(mealDetailResponse.getMeals().get(0)); // Assuming only one meal detail is returned
+                    view.showMealDetails(mealDetailResponse.getMeals().get(0));
                 }
 
                 @Override

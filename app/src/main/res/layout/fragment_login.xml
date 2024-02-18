@@ -135,7 +135,8 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/ForgetPassword"
                 android:textColor="@color/primaryTextColor"
-                android:textSize="@dimen/newsMoreTextSize" />
+                android:textSize="@dimen/newsMoreTextSize"
+                android:visibility="gone" />
 
             <com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton
                 android:id="@+id/btnLogin"

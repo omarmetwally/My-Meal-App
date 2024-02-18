@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Akelny</string>
+    <string name="app_name">Aklaty</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
@@ -81,7 +81,7 @@
 
 
     <string name="Undo">Undo</string>
-    <string name="Recommended_meals">Recommended meals</string>
+    <string name="Recommended_meals">Inspiration meals</string>
 
 
 </resources>

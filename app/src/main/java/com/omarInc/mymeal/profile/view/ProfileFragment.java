@@ -69,7 +69,6 @@ public class ProfileFragment extends Fragment implements ProfileView {
     }
 
     private void initializePresenter() {
-        // Initialize your presenter here
         Context context = getContext();
         if (context != null) {
             FirebaseAuthDataSourceImpl firebaseAuthDataSource = new FirebaseAuthDataSourceImpl();

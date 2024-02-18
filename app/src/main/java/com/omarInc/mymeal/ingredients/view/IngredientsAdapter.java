@@ -59,7 +59,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
         Ingredient ingredient = ingredients.get(position);
         holder.txtIngredientName.setText(ingredient.getStrIngredient());
-        // Assuming Ingredient model has a method getIngredientImageUrl() to get the image URL
         holder.shimmerViewContainer.startShimmer();
         holder.shimmerViewContainer.setVisibility(View.VISIBLE);
         holder.imgIngredient.setVisibility(View.INVISIBLE);

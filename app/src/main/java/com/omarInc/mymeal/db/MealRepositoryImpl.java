@@ -49,8 +49,6 @@ public class MealRepositoryImpl implements MealRepository {
 
     @Override
     public LiveData<MealDetail> getMealById(String idMeal) {
-        // Since this is a synchronous operation, it should not be called on the UI thread.
-        // Consider using LiveData or another async pattern.
         return mealDao.getMealById(idMeal);
     }
 

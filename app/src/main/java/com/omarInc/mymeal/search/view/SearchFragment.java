@@ -28,6 +28,9 @@ import com.omarInc.mymeal.search.presenter.SearchPresenterImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+
 
 public class SearchFragment extends Fragment implements SearchingView {
 
@@ -36,6 +39,9 @@ public class SearchFragment extends Fragment implements SearchingView {
     RecyclerView searchResultsRecyclerView;
     MealsAdapter adapter;
     SearchPresenter searchPresenter;
+
+    private final PublishSubject<String> searchSubject = PublishSubject.create();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public SearchFragment() {
     }
@@ -65,12 +71,12 @@ public class SearchFragment extends Fragment implements SearchingView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
          searchingView = view.findViewById(R.id.search_view);
          searchResultsRecyclerView = view.findViewById(R.id.search_results_recyclerview);
 
-        searchPresenter = new SearchPresenterImpl(this, MealRemoteDataSourceImpl.getInstance());
-// Set up the RecyclerView with a GridLayoutManager
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2); // 2 columns
+        searchPresenter = new SearchPresenterImpl(this, MealRemoteDataSourceImpl.getInstance(getContext()));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         searchResultsRecyclerView.setLayoutManager(gridLayoutManager);
 
         adapter = new MealsAdapter(getContext(), new ArrayList<>(),mealId -> {
@@ -84,31 +90,39 @@ public class SearchFragment extends Fragment implements SearchingView {
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_scale_in);
         searchResultsRecyclerView.setLayoutAnimation(animation);
 
-        searchPresenter.performSearch("");
-
+      searchPresenter.performSearch(searchSubject.hide());
 
 
         searchingView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchPresenter.performSearch(query);
+                searchSubject.onNext(query);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                searchPresenter.performSearch(newText);
+                searchSubject.onNext(newText);
                 return false;
             }
         });
     }
 
+
+
     @Override
     public void showSearchResults(List<Meal> meals) {
         adapter.setMeals(meals);
         if(meals != null && !meals.isEmpty()) {
-            searchResultsRecyclerView.scheduleLayoutAnimation(); // Trigger animation after setting data
+            searchResultsRecyclerView.scheduleLayoutAnimation();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        searchSubject.onNext("");
+
     }
 
     @Override
@@ -116,5 +130,13 @@ public class SearchFragment extends Fragment implements SearchingView {
 //        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         adapter.setMeals(null);
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (searchPresenter != null) {
+            searchPresenter.clearSubscriptions();
+        }
     }
 }

@@ -124,9 +124,8 @@ public class MainActivity2 extends AppCompatActivity implements UserTypeView {
             int itemId = item.getItemId();
             if (itemId == R.id.savedFragment || itemId == R.id.planFragment || itemId == R.id.profileFragment) {
                 showAlertForDisabledFeature();
-                return false; // Do not proceed with navigation
+                return false;
             } else {
-                // Proceed with default navigation
                 NavigationUI.onNavDestinationSelected(item, navController);
                 return true;
             }
