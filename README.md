@@ -1,4 +1,6 @@
 # Aklaty - Your Personalized Meal Guide -
+## Play Store Link:
+https://play.google.com/store/apps/details?id=com.omarInc.mymeal
 
 ## Features:
 
