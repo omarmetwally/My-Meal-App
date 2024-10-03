@@ -28,7 +28,7 @@ public class SearchPresenterImpl implements SearchPresenter {
         compositeDisposable.clear();
 
         Disposable disposable = searchQueryObservable
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .debounce(1, TimeUnit.SECONDS)
                 .distinctUntilChanged()
                 .flatMap(query -> mealRemoteDataSource.searchMealsByName(query))
                 .subscribeOn(Schedulers.io())

@@ -1,6 +1,6 @@
 package com.omarInc.mymeal.search.presenter;
 
-import android.database.Observable;
+
 
 public interface SearchPresenter {
 //    void performSearch(Observable<String> searchQueryObservable);

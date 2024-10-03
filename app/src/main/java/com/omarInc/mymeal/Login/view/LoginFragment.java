@@ -1,16 +1,23 @@
 package com.omarInc.mymeal.Login.view;
 
+import static androidx.browser.customtabs.CustomTabsClient.getPackageName;
+
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +41,7 @@ import com.omarInc.mymeal.Login.presenter.LoginPresenter;
 import com.omarInc.mymeal.Login.presenter.LoginPresenterImpl;
 import com.omarInc.mymeal.MainActivity2;
 import com.omarInc.mymeal.MainSplashScreenActivity;
+import android.Manifest;
 import com.omarInc.mymeal.R;
 import com.omarInc.mymeal.db.MealRepositoryImpl;
 import com.omarInc.mymeal.firebase.FirebaseAuthDataSourceImpl;
@@ -51,6 +59,7 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     CircularProgressButton btnLogin;
     private LoginPresenter presenter;
     private GoogleSignInClient mGoogleSignInClient;
+    private static final int POST_NOTIFICATIONS_REQUEST_CODE = 12345;
 
     public static LoginFragment newInstance(String param1, String param2) {
         LoginFragment fragment = new LoginFragment();
@@ -76,6 +85,14 @@ public class LoginFragment extends Fragment implements OnLoginClick,LoginView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Check if the POST_NOTIFICATIONS permission is already granted
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // If not, request the permission
+                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, POST_NOTIFICATIONS_REQUEST_CODE);
+            }
+        }
+
         navController = Navigation.findNavController(view);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))

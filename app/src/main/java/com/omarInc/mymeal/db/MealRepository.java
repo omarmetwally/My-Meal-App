@@ -57,7 +57,7 @@ public interface MealRepository {
 
     Flowable<List<MealDetail>> getAllMeals();
 
-    LiveData<List<ScheduledMeal>> getAllSchedules();
+
 
     void clearAll();
 
@@ -67,10 +67,16 @@ public interface MealRepository {
 
     void scheduleMeal(MealDetail mealDetail, Date selectedDate);
 
+
+
+
+
+
     LiveData<List<Meal>> getMealsForDay(long dayStart, long dayEnd);
 
     void deleteScheduledMeal(String mealId, long scheduledDate);
 
     LiveData<List<Date>> getAllScheduledDates();
+    LiveData<List<ScheduledMeal>> getAllSchedules();
 
 }

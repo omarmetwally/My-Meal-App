@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.omarInc.mymeal.Home.presenter.UserTypePresenter;
 import com.omarInc.mymeal.Home.presenter.UserTypePresenterImpl;
 import com.omarInc.mymeal.Home.view.UserTypeView;
@@ -60,6 +61,14 @@ public class MainActivity2 extends AppCompatActivity implements UserTypeView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+//        FirebaseMessaging.getInstance().subscribeToTopic("general")
+//                .addOnCompleteListener(task -> {
+//                    String msg = "Subscribed to topic 'general'!";
+//                    if (!task.isSuccessful()) {
+//                        msg = "Subscribe to topic 'general' failed";
+//                    }
+//                    Log.d(TAG, msg);
+//                });
 
         presenter=new UserTypePresenterImpl(this, SharedPreferencesDataSourceImpl.getInstance(getApplication()));
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
