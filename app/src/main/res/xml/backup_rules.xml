@@ -6,10 +6,11 @@
    See https://developer.android.com/about/versions/12/backup-restore
 -->
 <full-backup-content>
-    <!--
-   <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="device.xml"/>
--->
+    <!-- For Android 11 or Lower -->
+
+    <!-- Include sharedpref file -->
     <include domain="sharedpref" path="Auth.xml"/>
 
+    <!-- Include Room database file -->
+    <include domain="database" path="meal_database"/>
 </full-backup-content>

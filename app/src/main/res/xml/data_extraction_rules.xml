@@ -4,12 +4,13 @@
    for details.
 -->
 <data-extraction-rules>
+    <!-- For Android 12 or Higher -->
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
-        <include .../>
-        <exclude .../>
-        -->
+        <!-- Include sharedpref file -->
         <include domain="sharedpref" path="Auth.xml"/>
+
+        <!-- Include Room database file -->
+        <include domain="database" path="meal_database"/>
     </cloud-backup>
     <!--
     <device-transfer>
